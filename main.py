@@ -8,7 +8,7 @@ HEIGHT = WIDTH
 DIMENSTIONS = 8
 squareSize = WIDTH // DIMENSTIONS
 IMAGES = {}
-
+colorr=(120, 188, 227)
 
 
 '''
@@ -45,6 +45,7 @@ def main():
                 location = p.mouse.get_pos()
                 col = location[0]//squareSize#location 2. click
                 row = location[1]//squareSize#location 2. click
+                
 
                 if selectedSquare == (row, col):# reset when clicked same position
                     selectedSquare = ()
@@ -69,20 +70,28 @@ def main():
 
                 selectedSquare = (row, col)
 
-        drawGameState(screen, gameState)
+        drawGameState(screen, gameState, selectedSquare)
         clock.tick(30)
         p.display.flip()
 
 
-def drawGameState(screen, gameState):
-    drawBoard(screen)
+def changeColor(screen, gameState, selectedSquare):
+        if selectedSquare != ():
+            r, c = selectedSquare
+            s = p.Surface((WIDTH/8, WIDTH/8))
+            s.set_alpha(170)
+            s.fill(p.Color('red'))
+            screen.blit(s, (c*(WIDTH/8), (r*WIDTH/8)))
+
+
+def drawGameState(screen, gameState, selectedSquare):
+    drawBoard(screen, colorr)
+    changeColor(screen, gameState, selectedSquare)
     drawPieces(screen, gameState.board)
 
 
-
-
-def drawBoard(screen):
-    colors = [p.Color(235, 235, 208), p.Color(120, 188, 227)]
+def drawBoard(screen, colorr):
+    colors = [p.Color(235, 235, 208), p.Color(colorr)]
     for r in range(DIMENSTIONS):
         for c in range(DIMENSTIONS):
             color = colors[((r+c)%2)]
