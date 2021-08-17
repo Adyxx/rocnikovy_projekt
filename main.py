@@ -45,12 +45,14 @@ def main():
                 location = p.mouse.get_pos()
                 col = location[0]//squareSize#location 2. click
                 row = location[1]//squareSize#location 2. click
-                
+
 
                 if selectedSquare == (row, col):# reset when clicked same position
                     selectedSquare = ()
                     clicks = []
                 else:
+
+
                     clicks.append(selectedSquare)
                     if len(clicks) == 2:
                         pos1 = selectedSquare[0] #location 1. click
@@ -63,8 +65,13 @@ def main():
                                 elif (gameState.board[pos1][pos2] == "bl"):
                                     gameState.board[row][col] = "bl"#create new black piece
                                 gameState.board[pos1][pos2] = "--" #remove piece
-
                         clicks = []
+                if len(clicks) == 1:
+                    if (gameState.board[row][col] == "--"):
+                        clicks = []
+
+
+
 
 
 
