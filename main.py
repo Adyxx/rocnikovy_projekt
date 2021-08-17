@@ -43,24 +43,26 @@ def main():
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos()
-                col = location[0]//squareSize
-                row = location[1]//squareSize
+                col = location[0]//squareSize#location 2. click
+                row = location[1]//squareSize#location 2. click
 
-                if selectedSquare == (row, col):
+                if selectedSquare == (row, col):# reset when clicked same position
                     selectedSquare = ()
                     clicks = []
                 else:
                     clicks.append(selectedSquare)
                     if len(clicks) == 2:
-                        pos1 = selectedSquare[0]
-                        pos2 = selectedSquare[1]
-                        if (gameState.board[pos1][pos2] != "--"):
-                            if (gameState.board[row][col] == "--"):
+                        pos1 = selectedSquare[0] #location 1. click
+                        pos2 = selectedSquare[1] #location 1. click
+                        if (gameState.board[pos1][pos2] != "--"): #does 1. position have piece?
+                            if (gameState.board[row][col] == "--"): # is 2. position empty?
+                                #what color am I moving?
                                 if (gameState.board[pos1][pos2] == "wh"):
-                                    gameState.board[row][col] = "wh"
+                                    gameState.board[row][col] = "wh"#create new white piece
                                 elif (gameState.board[pos1][pos2] == "bl"):
-                                    gameState.board[row][col] = "bl"
-                                gameState.board[pos1][pos2] = "--"
+                                    gameState.board[row][col] = "bl"#create new black piece
+                                gameState.board[pos1][pos2] = "--" #remove piece
+
                         clicks = []
 
 
