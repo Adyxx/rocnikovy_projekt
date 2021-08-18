@@ -44,12 +44,15 @@ def main():
                 col = location[0]//squareSize#location 2. click
                 row = location[1]//squareSize#location 2. click
 
-
+                if (gameState.board[row][col] != "--"):
+	                selectedSquare = ()
+	                clicks = []
+                    
                 if selectedSquare == (row, col):# reset when clicked same position
                     selectedSquare = ()
                     clicks = []
                 else:
-
+                    
                     clicks.append(selectedSquare)
                     if len(clicks) == 2:
                         pos1 = selectedSquare[0] #location 1. click
@@ -57,7 +60,7 @@ def main():
                         if (gameState.board[pos1][pos2] != "--"): #does 1. position have piece?
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 #what color am I moving?
-
+      
                                 if move == 1:
                                     if (gameState.board[pos1][pos2] == "wh"):
                                         gameState.board[row][col] = "wh"#create new white piece
@@ -112,18 +115,12 @@ def drawBoard(screen):
             p.draw.rect(screen, color, p.Rect(c*squareSize, r*squareSize, squareSize, squareSize))
 
 
-
-
 def drawPieces(screen, board):
     for r in range(DIMENSTIONS):
         for c in range(DIMENSTIONS):
             piece = board[r][c]
             if piece != "--":
                 screen.blit(IMAGES[piece], p.Rect(c*squareSize, r*squareSize, squareSize, squareSize))
-
-
-
-
 
 
 if __name__ == "__main__":
