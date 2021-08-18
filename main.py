@@ -57,7 +57,7 @@ def main():
                         if (gameState.board[pos1][pos2] != "--"): #does 1. position have piece?
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 #what color am I moving?
-
+                                print("White to move")
                                 if move == 1:
                                     if (gameState.board[pos1][pos2] == "wh"):
                                         gameState.board[row][col] = "wh"#create new white piece
