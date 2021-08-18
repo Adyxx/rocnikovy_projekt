@@ -78,10 +78,11 @@ def main():
 def changeColor(screen, gameState, selectedSquare):
         if selectedSquare != ():
             r, c = selectedSquare
-            s = p.Surface((WIDTH/8, WIDTH/8))
-            s.set_alpha(170)
-            s.fill(p.Color('red'))
-            screen.blit(s, (c*(WIDTH/8), (r*WIDTH/8)))
+            if (gameState.board[r][c] != "--"):
+                s = p.Surface((WIDTH/8, WIDTH/8))
+                s.set_alpha(170)
+                s.fill(p.Color('red'))
+                screen.blit(s, (c*(WIDTH/8), (r*WIDTH/8)))
 
 
 def drawGameState(screen, gameState, selectedSquare):
