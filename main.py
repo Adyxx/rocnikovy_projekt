@@ -1,4 +1,3 @@
-
 import pygame as p
 import board
 
