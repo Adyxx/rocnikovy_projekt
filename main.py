@@ -57,20 +57,21 @@ def main():
                         if (gameState.board[pos1][pos2] != "--"): #does 1. position have piece?
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 #what color am I moving?
-                                
-                                print(move)
+
                                 if move == 1:
                                     if (gameState.board[pos1][pos2] == "wh"):
                                         gameState.board[row][col] = "wh"#create new white piece
+                                        gameState.board[pos1][pos2] = "--" #remove piece
                                         move = 0
-                                        print(move)
+                                        print("Black to move")
                                 else:
                                     if (gameState.board[pos1][pos2] == "bl"):
                                         gameState.board[row][col] = "bl"#create new black piece
+                                        gameState.board[pos1][pos2] = "--" #remove piece
                                         move = 1
-                                        print(move)
+                                        print("White to move")
                                         
-                                gameState.board[pos1][pos2] = "--" #remove piece
+                                
                                 
                         clicks = []
                 if len(clicks) == 1:
