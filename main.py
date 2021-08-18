@@ -7,7 +7,7 @@ HEIGHT = WIDTH
 DIMENSTIONS = 8
 squareSize = WIDTH // DIMENSTIONS
 IMAGES = {}
-colorr=(120, 188, 227)
+
 
 
 '''
@@ -20,8 +20,6 @@ def loadImages():
         IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"),(squareSize, squareSize))
 
 
-
-
 '''
     main
 '''
@@ -30,6 +28,7 @@ def main():
     screen = p.display.set_mode((WIDTH, HEIGHT))
     screen.fill(p.Color("white"))
     clock = p.time.Clock()
+    move = 1
     gameState = board.GameState()
     #print(gameState.board)
     loadImages()
@@ -51,7 +50,6 @@ def main():
                     clicks = []
                 else:
 
-
                     clicks.append(selectedSquare)
                     if len(clicks) == 2:
                         pos1 = selectedSquare[0] #location 1. click
@@ -59,19 +57,25 @@ def main():
                         if (gameState.board[pos1][pos2] != "--"): #does 1. position have piece?
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 #what color am I moving?
-                                if (gameState.board[pos1][pos2] == "wh"):
-                                    gameState.board[row][col] = "wh"#create new white piece
-                                elif (gameState.board[pos1][pos2] == "bl"):
-                                    gameState.board[row][col] = "bl"#create new black piece
+                                
+                                print(move)
+                                if move == 1:
+                                    if (gameState.board[pos1][pos2] == "wh"):
+                                        gameState.board[row][col] = "wh"#create new white piece
+                                        move = 0
+                                        print(move)
+                                else:
+                                    if (gameState.board[pos1][pos2] == "bl"):
+                                        gameState.board[row][col] = "bl"#create new black piece
+                                        move = 1
+                                        print(move)
+                                        
                                 gameState.board[pos1][pos2] = "--" #remove piece
+                                
                         clicks = []
                 if len(clicks) == 1:
                     if (gameState.board[row][col] == "--"):
                         clicks = []
-
-
-
-
 
 
                 selectedSquare = (row, col)
@@ -82,23 +86,25 @@ def main():
 
 
 def changeColor(screen, gameState, selectedSquare):
+ 
         if selectedSquare != ():
             r, c = selectedSquare
+
             if (gameState.board[r][c] != "--"):
-                s = p.Surface((WIDTH/8, WIDTH/8))
+                s = p.Surface((WIDTH/DIMENSTIONS, WIDTH/DIMENSTIONS))
                 s.set_alpha(170)
                 s.fill(p.Color('red'))
-                screen.blit(s, (c*(WIDTH/8), (r*WIDTH/8)))
+                screen.blit(s, (c*(WIDTH/DIMENSTIONS), (r*WIDTH/DIMENSTIONS)))
 
 
 def drawGameState(screen, gameState, selectedSquare):
-    drawBoard(screen, colorr)
+    drawBoard(screen)
     changeColor(screen, gameState, selectedSquare)
     drawPieces(screen, gameState.board)
 
 
-def drawBoard(screen, colorr):
-    colors = [p.Color(235, 235, 208), p.Color(colorr)]
+def drawBoard(screen):
+    colors = [p.Color(235, 235, 208), p.Color(120, 188, 227)]
     for r in range(DIMENSTIONS):
         for c in range(DIMENSTIONS):
             color = colors[((r+c)%2)]
