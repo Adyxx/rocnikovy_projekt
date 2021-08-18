@@ -71,8 +71,7 @@ def main():
                                         move = 1
                                         print("White to move")
                                         
-                                
-                                
+                                          
                         clicks = []
                 if len(clicks) == 1:
                     if (gameState.board[row][col] == "--"):
@@ -81,26 +80,27 @@ def main():
 
                 selectedSquare = (row, col)
 
-        drawGameState(screen, gameState, selectedSquare)
+        drawGameState(screen, gameState, selectedSquare, move)
         clock.tick(30)
         p.display.flip()
 
 
-def changeColor(screen, gameState, selectedSquare):
+def changeColor(screen, gameState, selectedSquare, move):
  
         if selectedSquare != ():
             r, c = selectedSquare
 
             if (gameState.board[r][c] != "--"):
-                s = p.Surface((WIDTH/DIMENSTIONS, WIDTH/DIMENSTIONS))
-                s.set_alpha(170)
-                s.fill(p.Color('red'))
-                screen.blit(s, (c*(WIDTH/DIMENSTIONS), (r*WIDTH/DIMENSTIONS)))
+                if ( (move == 1 and gameState.board[r][c] != "bl") or (move == 0 and gameState.board[r][c] != "wh") ):
+                    s = p.Surface((WIDTH/DIMENSTIONS, WIDTH/DIMENSTIONS))
+                    s.set_alpha(170)
+                    s.fill(p.Color('red'))
+                    screen.blit(s, (c*(WIDTH/DIMENSTIONS), (r*WIDTH/DIMENSTIONS)))
 
 
-def drawGameState(screen, gameState, selectedSquare):
+def drawGameState(screen, gameState, selectedSquare, move):
     drawBoard(screen)
-    changeColor(screen, gameState, selectedSquare)
+    changeColor(screen, gameState, selectedSquare, move)
     drawPieces(screen, gameState.board)
 
 
