@@ -66,7 +66,7 @@ def main():
                                     gameState.board[row][col] = "bl"#create new black piece
                                 gameState.board[pos1][pos2] = "--" #remove piece
                         clicks = []
-                if len(clicks) == 1:
+                if len(clicks) == 1:#fixes problem with pieces not moving if clicked as second click
                     if (gameState.board[row][col] == "--"):
                         clicks = []
 
