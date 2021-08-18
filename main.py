@@ -15,7 +15,7 @@ IMAGES = {}
 '''
 
 def loadImages():
-    pieces = ["wh", "bl"]
+    pieces = ["wh", "bl", "whk", "blk"]
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"),(squareSize, squareSize))
 
