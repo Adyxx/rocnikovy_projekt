@@ -1,14 +1,11 @@
 import pygame as p
 import board
 
-
 WIDTH = 512
 HEIGHT = WIDTH
 DIMENSTIONS = 8
 squareSize = WIDTH // DIMENSTIONS
 IMAGES = {}
-
-
 
 '''
     images
@@ -18,7 +15,6 @@ def loadImages():
     pieces = ["wh", "bl", "whk", "blk"]
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"),(squareSize, squareSize))
-
 
 '''
     main
@@ -44,10 +40,10 @@ def main():
                 col = location[0]//squareSize#location 2. click
                 row = location[1]//squareSize#location 2. click
 
-                if (gameState.board[row][col] != "--"):
-	                selectedSquare = ()
-	                clicks = []
-                    
+                if (gameState.board[row][col] != "--"):# if there is piece on the location of the player's second click...          
+	                clicks = [] # then remove click memory
+                    # this fixes problem where player clicks a piece and then other piece that wouldn't move
+
                 if selectedSquare == (row, col):# reset when clicked same position
                     selectedSquare = ()
                     clicks = []
@@ -61,25 +57,20 @@ def main():
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 #what color am I moving?
       
-                                if move == 1:
-                                    if (gameState.board[pos1][pos2] == "wh"):
-                                        gameState.board[row][col] = "wh"#create new white piece
-                                        gameState.board[pos1][pos2] = "--" #remove piece
+                                if move == 1: # if it's White's turn
+                                    if (gameState.board[pos1][pos2] == "wh"): # if there is white piece...
+                                        gameState.board[row][col] = "wh"# create new white piece
+                                        gameState.board[pos1][pos2] = "--" # remove piece
                                         move = 0
                                         print("Black to move")
                                 else:
-                                    if (gameState.board[pos1][pos2] == "bl"):
+                                    if (gameState.board[pos1][pos2] == "bl"): # if there is black piece...
                                         gameState.board[row][col] = "bl"#create new black piece
                                         gameState.board[pos1][pos2] = "--" #remove piece
                                         move = 1
                                         print("White to move")
-                                        
-                                          
+                                                            
                         clicks = []
-                if len(clicks) == 1:#fixes problem with pieces not moving if clicked as second click
-                    if (gameState.board[row][col] == "--"):
-                        clicks = []
-
 
                 selectedSquare = (row, col)
 
@@ -90,14 +81,14 @@ def main():
 
 def changeColor(screen, gameState, selectedSquare, move):
  
-        if selectedSquare != ():
+        if selectedSquare != (): # if square is clicked.... (if square is not empty)
             r, c = selectedSquare
 
-            if (gameState.board[r][c] != "--"):
-                if ( (move == 1 and gameState.board[r][c] != "bl") or (move == 0 and gameState.board[r][c] != "wh") ):
+            if (gameState.board[r][c] != "--"): # if selected square has a piece....
+                if ( (move == 1 and gameState.board[r][c] != "bl") or (move == 0 and gameState.board[r][c] != "wh") ): # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
                     s = p.Surface((WIDTH/DIMENSTIONS, WIDTH/DIMENSTIONS))
-                    s.set_alpha(170)
-                    s.fill(p.Color('red'))
+                    s.set_alpha(170) #set opacity
+                    s.fill(p.Color('red')) # set color
                     screen.blit(s, (c*(WIDTH/DIMENSTIONS), (r*WIDTH/DIMENSTIONS)))
 
 
