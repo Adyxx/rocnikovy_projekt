@@ -100,6 +100,8 @@ def main():
                                             move = 0
                                             print("Black to move")
 
+                                    if (row == 0):
+                                        gameState.board[row][col] = "whk"
 
                                 else:
                                     if (pos1 == row - 1) and ((pos2 == col + 1) or (pos2 == col - 1)):
@@ -142,6 +144,8 @@ def main():
                                             gameState.board[pos1][pos2] = "--"  # remove piece
                                             move = 1
                                             print("White to move")
+                                    if (row == DIMENSTIONS -1):
+                                        gameState.board[row][col] = "blk"
 
                         clicks = []
 
