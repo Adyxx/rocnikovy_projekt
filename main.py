@@ -52,8 +52,7 @@ def main():
                     clicks.append(selectedSquare)
                     if len(clicks) == 2:
                         pos1 = selectedSquare[0] #location 1. click
-                        pos2 = selectedSquare[
-                            1] #location 1. click
+                        pos2 = selectedSquare[1] #location 1. click
                         if (gameState.board[pos1][pos2] != "--"): #does 1. position have piece?
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 #what color am I moving?
@@ -126,7 +125,7 @@ def changeColor(screen, gameState, selectedSquare, move):
             r, c = selectedSquare
 
             if (gameState.board[r][c] != "--"): # if selected square has a piece....
-                if ( (move == 1 and gameState.board[r][c] != "bl") or (move == 0 and gameState.board[r][c] != "wh") ): # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
+                if ( (move == 1 and gameState.board[r][c] != "bl" and gameState.board[r][c] != "blk") or (move == 0 and gameState.board[r][c] != "wh" and gameState.board[r][c] != "whk") ): # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
                     s = p.Surface((WIDTH/DIMENSTIONS, WIDTH/DIMENSTIONS))
                     s.set_alpha(170) #set opacity
                     s.fill(p.Color('red')) # set color
