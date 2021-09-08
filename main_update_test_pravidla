@@ -66,13 +66,23 @@ def main():
                                             print("Black to move")
                                                 #or ((pos1 == row + 2) and (pos2 == col - 2)))  and ((col + 1 != "--") or (col - 1 != "--"))))
 
-                                    elif (((pos1 == row + 2) and (pos2 == col - 2)) and (gameState.board[row+1][col-1] != "--")): # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
+                                    elif (((pos1 == row + 2) and (pos2 == col - 2)) and (gameState.board[row+1][col-1] != "--")) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
                                         if (gameState.board[pos1][pos2] == "wh"):  # if there is white piece...
                                             gameState.board[row][col] = "wh"  # create new white piece
                                             gameState.board[row+1][col-1] = "--"  # create new white piece
                                             gameState.board[pos1][pos2] = "--"  # remove piece
                                             move = 0
                                             print("Black to move")
+
+                                    elif (((pos1 == row + 2) and (pos2 == col + 2)) and (gameState.board[row+1][col+1] != "--")) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
+                                        if (gameState.board[pos1][pos2] == "wh"):  # if there is white piece...
+                                            gameState.board[row][col] = "wh"  # create new white piece
+                                            gameState.board[row+1][col+1] = "--"  # create new white piece
+                                            gameState.board[pos1][pos2] = "--"  # remove piece
+                                            move = 0
+                                            print("Black to move")
+
+
                                 else:
                                     if (pos1 == row - 1) and ((pos2 == col + 1) or (pos2 == col - 1)):
                                         if (gameState.board[pos1][pos2] == "bl"): # if there is black piece...
