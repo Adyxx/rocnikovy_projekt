@@ -4,7 +4,6 @@ import board
 WIDTH = 512
 HEIGHT = WIDTH
 DIMENSTIONS = 8
-DIMENSIONS = DIMENSTIONS +2
 squareSize = WIDTH // DIMENSTIONS
 IMAGES = {}
 
@@ -59,6 +58,9 @@ def main():
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 #what color am I moving?
                                 if move == 1: # if it's White's turn
+
+                                    s=2
+                                    r=2
 
                                     for s in range(DIMENSTIONS - 1):
                                         for r in range(DIMENSTIONS - 1):
