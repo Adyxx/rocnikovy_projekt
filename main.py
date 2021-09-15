@@ -56,56 +56,79 @@ def main():
                         if (gameState.board[pos1][pos2] != "--"): #does 1. position have piece?
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 #what color am I moving?
+                                piece = gameState.board[pos1][pos2] 
                                 if move == 1: # if it's White's turn
                                     if ((pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1))):
-
-                                        piece = "wh" if gameState.board[pos1][pos2] == "wh" else "whk" # if there is white piece...
+                                                                 
                                         gameState.board[row][col] = piece # create new white piece
                                         gameState.board[pos1][pos2] = "--" # remove piece
                                         move = 0
 
                                     elif ( ((pos1 == row + 2) and (pos2 == col - 2)) and (gameState.board[row+1][col-1] != "--") and ((gameState.board[row+1][col-1] != "wh") and (gameState.board[row+1][col-1] != "whk")) ) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
-                                                                       
-                                        piece = "wh" if gameState.board[pos1][pos2] == "wh" else "whk" # if there is white piece...
+                                                                                                              
                                         gameState.board[row][col] = piece # create new white piece
                                         gameState.board[row+1][col-1] = "--"
                                         gameState.board[pos1][pos2] = "--" # remove piece
                                         move = 0
                                         
                                     elif (((pos1 == row + 2) and (pos2 == col + 2)) and (gameState.board[row+1][col+1] != "--") and ((gameState.board[row+1][col+1] != "wh") and (gameState.board[row+1][col+1] != "whk")) ) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
-                                                                           
-                                        piece = "wh" if gameState.board[pos1][pos2] == "wh" else "whk" # if there is white piece...
+                                                                                                                
                                         gameState.board[row][col] = piece # create new white piece
                                         gameState.board[row+1][col+1] = "--"
                                         gameState.board[pos1][pos2] = "--" # remove piece
                                         move = 0                             
 
+                                    if (piece == "whk"):
+                                        for n in range(DIMENSTIONS):
+                                            if ( ((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n)) ):
+                                                gameState.board[row][col] = "whk"
+                                                gameState.board[pos1][pos2] = "--"
+ 
+                                                ################################################### TEST ###################################################
+                                                if( row<pos1 ):
+                                                    direction1 = "UP"
+                                                else:   
+                                                    direction1 = "DOWN"
+                                                if( col<pos2 ):
+                                                    direction2 = "LEFT"
+                                                else:
+                                                    direction2 = "RIGHT"
+
+                                                print(piece  + " moved from square [" + str(pos1) + "][" + str(pos2) + "] to squre [" + str(row) + "][" + str(col) + "]. It traveled " + str(n) + " square(s) " + direction1 + " and " + str(n) + " square(s) to the " + direction2 + "." )
+                                                ############################################################################################################
+                                                move = 0
+                                    
                                     if ((row == 0) and (gameState.board[row][col] == "wh")): #promoce
                                         gameState.board[row][col] = "whk"
 
                                 else:
                                     if (pos1 == row - 1) and ((pos2 == col + 1) or (pos2 == col - 1)):
-
-                                        piece = "bl" if gameState.board[pos1][pos2] == "bl" else "blk" # if there is black piece...
+                                       
                                         gameState.board[row][col] = piece # create new black piece
                                         gameState.board[pos1][pos2] = "--" # remove piece
                                         move = 1
       
                                     elif (((pos1 == row - 2) and (pos2 == col - 2)) and (gameState.board[row-1][col-1] != "--") and ((gameState.board[row-1][col-1] != "bl") and (gameState.board[row-1][col-1] != "blk")) ) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
-                                        
-                                        piece = "bl" if gameState.board[pos1][pos2] == "bl" else "blk" # if there is black piece...
+                                                                              
                                         gameState.board[row][col] = piece # create new black piece
                                         gameState.board[row-1][col-1] = "--" # delete white piece
                                         gameState.board[pos1][pos2] = "--" # remove piece
                                         move = 1
       
                                     elif (((pos1 == row - 2) and (pos2 == col + 2)) and (gameState.board[row-1][col+1] != "--") and ((gameState.board[row-1][col+1] != "bl") and (gameState.board[row-1][col+1] != "blk")) ) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
-                                        
-                                        piece = "bl" if gameState.board[pos1][pos2] == "bl" else "blk" # if there is black piece...
+                                                                           
                                         gameState.board[row][col] = piece # create new black piece
                                         gameState.board[row-1][col+1] = "--" # delete white piece
                                         gameState.board[pos1][pos2] = "--" # remove piece
-                                        move = 1    
+                                        move = 1
+                                    
+                                    if (piece == "blk"):
+                                        for n in range(DIMENSTIONS):
+                                            if ( ((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n)) ):
+                                                gameState.board[row][col] = "blk"
+                                                gameState.board[pos1][pos2] = "--"
+                                                print("[" + str(n) + "]")
+                                                move = 1
 
                                     if ((row == DIMENSTIONS -1) and (gameState.board[row][col] == "bl")): #promoce
                                         gameState.board[row][col] = "blk"
