@@ -83,19 +83,6 @@ def main():
                                             if ( ((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n)) ):
                                                 gameState.board[row][col] = "whk"
                                                 gameState.board[pos1][pos2] = "--"
- 
-                                                ################################################### TEST ###################################################
-                                                if( row<pos1 ):
-                                                    direction1 = "UP"
-                                                else:   
-                                                    direction1 = "DOWN"
-                                                if( col<pos2 ):
-                                                    direction2 = "LEFT"
-                                                else:
-                                                    direction2 = "RIGHT"
-
-                                                print(piece  + " moved from square [" + str(pos1) + "][" + str(pos2) + "] to squre [" + str(row) + "][" + str(col) + "]. It traveled " + str(n) + " square(s) " + direction1 + " and " + str(n) + " square(s) to the " + direction2 + "." )
-                                                ############################################################################################################
                                                 move = 0
                                     
                                     if ((row == 0) and (gameState.board[row][col] == "wh")): #promoce
@@ -127,11 +114,23 @@ def main():
                                             if ( ((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n)) ):
                                                 gameState.board[row][col] = "blk"
                                                 gameState.board[pos1][pos2] = "--"
-                                                print("[" + str(n) + "]")
                                                 move = 1
 
                                     if ((row == DIMENSTIONS -1) and (gameState.board[row][col] == "bl")): #promoce
                                         gameState.board[row][col] = "blk"
+                                
+                                ################################################### MOVE LOG ###################################################
+                                if( row<pos1 ):
+                                    direction1 = "UP"
+                                else:   
+                                    direction1 = "DOWN"
+                                if( col<pos2 ):
+                                    direction2 = "LEFT"
+                                else:
+                                    direction2 = "RIGHT"
+
+                                print("--- " + piece.upper() + " moved from square [" + str(pos1) + "][" + str(pos2) + "] to square [" + str(row) + "][" + str(col) + "]. It traveled "  + direction1 + " and "  + direction2 + ". ---" )
+                                ############################################################################################################
 
                         clicks = []
 
