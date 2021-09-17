@@ -3,8 +3,8 @@ import board
 
 WIDTH = 512
 HEIGHT = WIDTH
-DIMENSTIONS = 8
-squareSize = WIDTH // DIMENSTIONS
+DIMENSIONS = 8
+squareSize = WIDTH // DIMENSIONS
 IMAGES = {}
 
 '''
@@ -24,7 +24,7 @@ def main():
     screen = p.display.set_mode((WIDTH, HEIGHT))
     screen.fill(p.Color("white"))
     clock = p.time.Clock()
-    move = 1
+    main.move = 1
     gameState = board.GameState()
     #print(gameState.board)
     loadImages()
@@ -47,134 +47,84 @@ def main():
                 if selectedSquare == (row, col):# reset when clicked same position
                     selectedSquare = ()
                     clicks = []
-                else:
-                    
+                else:         
                     clicks.append(selectedSquare)
                     if len(clicks) == 2:
                         pos1 = selectedSquare[0] #location 1. click
                         pos2 = selectedSquare[1] #location 1. click
                         if (gameState.board[pos1][pos2] != "--"): #does 1. position have piece?
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
-                                #what color am I moving?
-                                piece = gameState.board[pos1][pos2] 
-                                if move == 1: # if it's White's turn
-                                    if ((pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1))):
-                                                                 
-                                        gameState.board[row][col] = piece # create new white piece
-                                        gameState.board[pos1][pos2] = "--" # remove piece
-                                        move = 0
+                                piece = gameState.board[pos1][pos2]
 
-                                    elif ( ((pos1 == row + 2) and (pos2 == col - 2)) and (gameState.board[row+1][col-1] != "--") and ((gameState.board[row+1][col-1] != "wh") and (gameState.board[row+1][col-1] != "whk")) ) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
-                                                                                                              
-                                        gameState.board[row][col] = piece # create new white piece
-                                        gameState.board[row+1][col-1] = "--"
-                                        gameState.board[pos1][pos2] = "--" # remove piece
-                                        move = 0
-                                        
-                                    elif (((pos1 == row + 2) and (pos2 == col + 2)) and (gameState.board[row+1][col+1] != "--") and ((gameState.board[row+1][col+1] != "wh") and (gameState.board[row+1][col+1] != "whk")) ) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
-                                                                                                                
-                                        gameState.board[row][col] = piece # create new white piece
-                                        gameState.board[row+1][col+1] = "--"
-                                        gameState.board[pos1][pos2] = "--" # remove piece
-                                        move = 0                             
-
-                                    if (piece == "whk"):
-                                        for n in range(DIMENSTIONS):
-                                            if ( ((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n)) ):
-                                                gameState.board[row][col] = "whk"
-                                                gameState.board[pos1][pos2] = "--"
-                                                move = 0
-                                    
-                                    if ((row == 0) and (gameState.board[row][col] == "wh")): #promoce
-                                        gameState.board[row][col] = "whk"
-
-                                else:
-                                    if (pos1 == row - 1) and ((pos2 == col + 1) or (pos2 == col - 1)):
-                                       
-                                        gameState.board[row][col] = piece # create new black piece
-                                        gameState.board[pos1][pos2] = "--" # remove piece
-                                        move = 1
-      
-                                    elif (((pos1 == row - 2) and (pos2 == col - 2)) and (gameState.board[row-1][col-1] != "--") and ((gameState.board[row-1][col-1] != "bl") and (gameState.board[row-1][col-1] != "blk")) ) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
-                                                                              
-                                        gameState.board[row][col] = piece # create new black piece
-                                        gameState.board[row-1][col-1] = "--" # delete white piece
-                                        gameState.board[pos1][pos2] = "--" # remove piece
-                                        move = 1
-      
-                                    elif (((pos1 == row - 2) and (pos2 == col + 2)) and (gameState.board[row-1][col+1] != "--") and ((gameState.board[row-1][col+1] != "bl") and (gameState.board[row-1][col+1] != "blk")) ) : # or ((pos1 == row - 2) and (pos2 == col - 2) and (gameState.board[row - 1][col - 1] != "--"))
-                                                                           
-                                        gameState.board[row][col] = piece # create new black piece
-                                        gameState.board[row-1][col+1] = "--" # delete white piece
-                                        gameState.board[pos1][pos2] = "--" # remove piece
-                                        move = 1
-                                    
-                                    if (piece == "blk"):
-                                        for n in range(DIMENSTIONS):
-                                            if ( ((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n)) ):
-                                                gameState.board[row][col] = "blk"
-                                                gameState.board[pos1][pos2] = "--"
-                                                move = 1
-
-                                    if ((row == DIMENSTIONS -1) and (gameState.board[row][col] == "bl")): #promoce
-                                        gameState.board[row][col] = "blk"
+                                movePiece(gameState, piece, pos1, pos2, row, col)
                                 
-                                ################################################### MOVE LOG ###################################################
-                                if( row<pos1 ):
-                                    direction1 = "UP"
-                                else:   
-                                    direction1 = "DOWN"
-                                if( col<pos2 ):
-                                    direction2 = "LEFT"
-                                else:
-                                    direction2 = "RIGHT"
-
-                                print("--- " + piece.upper() + " moved from square [" + str(pos1) + "][" + str(pos2) + "] to square [" + str(row) + "][" + str(col) + "]. It traveled "  + direction1 + " and "  + direction2 + ". ---" )
-                                ############################################################################################################
-
                         clicks = []
-
                 selectedSquare = (row, col)
 
-        drawGameState(screen, gameState, selectedSquare, move)
+        drawGameState(screen, gameState, selectedSquare)
         clock.tick(30)
         p.display.flip()
 
-
-def changeColor(screen, gameState, selectedSquare, move):
+def changeColor(screen, gameState, selectedSquare):
  
         if selectedSquare != (): # if square is clicked.... (if square is not empty)
             r, c = selectedSquare
 
             if (gameState.board[r][c] != "--"): # if selected square has a piece....
-                if ( (move == 1 and gameState.board[r][c] != "bl" and gameState.board[r][c] != "blk") or (move == 0 and gameState.board[r][c] != "wh" and gameState.board[r][c] != "whk") ): # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
-                    s = p.Surface((WIDTH/DIMENSTIONS, WIDTH/DIMENSTIONS))
+                if ( (main.move == 1 and gameState.board[r][c] != "bl" and gameState.board[r][c] != "blk") or (main.move == 0 and gameState.board[r][c] != "wh" and gameState.board[r][c] != "whk") ): # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
+                    s = p.Surface((WIDTH/DIMENSIONS, WIDTH/DIMENSIONS))
                     s.set_alpha(170) #set opacity
                     s.fill(p.Color('red')) # set color
-                    screen.blit(s, (c*(WIDTH/DIMENSTIONS), (r*WIDTH/DIMENSTIONS)))
+                    screen.blit(s, (c*(WIDTH/DIMENSIONS), (r*WIDTH/DIMENSIONS)))
 
+def movePiece(gameState, piece, pos1, pos2, row, col):
+    direction1 = 1 if piece == "wh" else -1
 
-def drawGameState(screen, gameState, selectedSquare, move):
-    drawBoard(screen)
-    changeColor(screen, gameState, selectedSquare, move)
-    drawPieces(screen, gameState.board)
+    if ( main.move == 1 and piece=="wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or ( main.move == 0 and piece=="bl" and (pos1 == row - 1) and ( (pos2 == col + 1) or (pos2 == col - 1)))):                                                            
+        gameState.board[row][col] = piece # create new white piece
+        gameState.board[pos1][pos2] = "--" # remove piece
+        main.move = 1 if main.move != 1 else 0
 
+    elif (  main.move == 1 and piece=="wh" and ((pos1 == row + 2) and (pos2 == col - 2)) and (gameState.board[row+1][col-1] != "--") and ( not gameState.board[row+1][col-1].startswith("wh") ) or ( main.move == 0 and piece=="bl" and ((pos1 == row - 2) and (pos2 == col - 2)) and (gameState.board[row-1][col-1] != "--") and ( not gameState.board[row-1][col-1].startswith("bl") )) ):                     
+        gameState.board[row][col] = piece # create new piece
+        gameState.board[row+direction1][col-1] = "--"
+        gameState.board[pos1][pos2] = "--" # remove piece
+        main.move = 1 if main.move != 1 else 0
+                 
+    elif ( main.move == 1 and piece=="wh" and ((pos1 == row + 2) and (pos2 == col + 2)) and (gameState.board[row+1][col+1] != "--") and ( not gameState.board[row+1][col+1].startswith("wh") ) or ( main.move == 0 and piece=="bl" and ((pos1 == row - 2) and (pos2 == col + 2)) and (gameState.board[row-1][col+1] != "--") and ( not gameState.board[row-1][col+1].startswith("bl"))  )) :
+        gameState.board[row][col] = piece # create new white piece
+        gameState.board[row+direction1][col+1] = "--"
+        gameState.board[pos1][pos2] = "--" # remove piece
+        main.move = 1 if main.move != 1 else 0
+
+    elif (piece.endswith("k")):
+        for n in range(DIMENSIONS):
+            if ( (((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n))) and ( (piece == "blk" and main.move == 0) or (piece == "whk" and main.move == 1) ) ):
+                gameState.board[row][col] = piece
+                gameState.board[pos1][pos2] = "--"
+                main.move = 1 if main.move != 1 else 0
+
+    if ((row == 0) and (gameState.board[row][col] == "wh") or (row == DIMENSIONS -1) and (gameState.board[row][col] == "bl") ): # promotion 
+        gameState.board[row][col] = str(piece)+"k"
 
 def drawBoard(screen):
     colors = [p.Color(235, 235, 208), p.Color(120, 188, 227)]
-    for r in range(DIMENSTIONS):
-        for c in range(DIMENSTIONS):
+    for r in range(DIMENSIONS):
+        for c in range(DIMENSIONS):
             color = colors[((r+c)%2)]
             p.draw.rect(screen, color, p.Rect(c*squareSize, r*squareSize, squareSize, squareSize))
 
-
 def drawPieces(screen, board):
-    for r in range(DIMENSTIONS):
-        for c in range(DIMENSTIONS):
+    for r in range(DIMENSIONS):
+        for c in range(DIMENSIONS):
             piece = board[r][c]
             if piece != "--":
                 screen.blit(IMAGES[piece], p.Rect(c*squareSize, r*squareSize, squareSize, squareSize))
 
+def drawGameState(screen, gameState, selectedSquare):
+    drawBoard(screen)
+    changeColor(screen, gameState, selectedSquare)
+    drawPieces(screen, gameState.board)
 
 if __name__ == "__main__":
     main()
