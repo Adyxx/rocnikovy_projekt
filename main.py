@@ -98,11 +98,48 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         main.move = 1 if main.move != 1 else 0
 
     elif (piece.endswith("k")):
+
+        if (row < pos1):
+            direction1 = 1 #UP
+        else:
+            direction1 = 0 #DOWN
+        if (col < pos2):
+            direction2 = 1 #LEFT
+        else:
+            direction2 = 0 #RIGHT
+
+        if ((direction1 == 1 and direction2 == 1)):
+            for i in range(pos1 - row):
+                i=i+1
+                if ((gameState.board[pos1 - i][pos2 - i] != "--")):
+                    print("přeskok")
+                    
+
+        elif ((direction1 == 0 and direction2 == 1)):
+            for i in range(row - pos1):
+                i=i+1
+                if ((gameState.board[pos1 + i][pos2 - i] != "--")):
+                    print("přeskok")
+
+        elif ((direction1 == 1 and direction2 == 0)):
+            for i in range(pos1 - row):
+                i=i+1
+                if ((gameState.board[pos1 - i][pos2 + i] != "--")):
+                    print("přeskok")
+
+        elif ((direction1 == 0 and direction2 == 0)):
+            for i in range(row - pos1):
+                i=i+1
+                if ((gameState.board[pos1 + i][pos2 + i] != "--")):
+                    print("přeskok")
+
         for n in range(DIMENSIONS):
             if ( (((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n))) and ( (piece == "blk" and main.move == 0) or (piece == "whk" and main.move == 1) ) ):
                 gameState.board[row][col] = piece
                 gameState.board[pos1][pos2] = "--"
                 main.move = 1 if main.move != 1 else 0
+
+
 
     if ((row == 0) and (gameState.board[row][col] == "wh") or (row == DIMENSIONS -1) and (gameState.board[row][col] == "bl") ): # promotion 
         gameState.board[row][col] = str(piece)+"k"
