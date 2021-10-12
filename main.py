@@ -102,42 +102,94 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         if (row < pos1):
             direction1 = 1 #UP
         else:
-            direction1 = 0 #DOWN
+            direction1 = -1 #DOWN
         if (col < pos2):
             direction2 = 1 #LEFT
         else:
-            direction2 = 0 #RIGHT
+            direction2 = -1 #RIGHT
 
-        if ((direction1 == 1 and direction2 == 1)):
-            for i in range(pos1 - row):
-                i=i+1
-                if ((gameState.board[pos1 - i][pos2 - i] != "--")):
-                    print("přeskok")
-                    
 
-        elif ((direction1 == 0 and direction2 == 1)):
-            for i in range(row - pos1):
-                i=i+1
-                if ((gameState.board[pos1 + i][pos2 - i] != "--")):
-                    print("přeskok")
-
-        elif ((direction1 == 1 and direction2 == 0)):
-            for i in range(pos1 - row):
-                i=i+1
-                if ((gameState.board[pos1 - i][pos2 + i] != "--")):
-                    print("přeskok")
-
-        elif ((direction1 == 0 and direction2 == 0)):
-            for i in range(row - pos1):
-                i=i+1
-                if ((gameState.board[pos1 + i][pos2 + i] != "--")):
-                    print("přeskok")
-
+        jump =0
         for n in range(DIMENSIONS):
             if ( (((pos1 == row + n) or (pos1 == row - n)) and ((pos2 == col + n) or (pos2 == col - n))) and ( (piece == "blk" and main.move == 0) or (piece == "whk" and main.move == 1) ) ):
-                gameState.board[row][col] = piece
-                gameState.board[pos1][pos2] = "--"
-                main.move = 1 if main.move != 1 else 0
+                if ((direction1 == 1 and direction2 == 1)):
+                    for i in range(pos1 - row):
+                        i = i + 1
+                        if ((gameState.board[pos1 - i][pos2 - i] != "--")):
+                            print("přeskok")
+                            jump = jump+1
+
+                            if ((((pos1 - i - 1) == row) and ((pos2 - i - 1) == col))and jump ==1):
+                                gameState.board[row][col] = piece  # create new white piece
+                                gameState.board[row + direction1][col + direction2] = "--"
+                                gameState.board[pos1][pos2] = "--"  # remove piece
+                                main.move = 1 if main.move != 1 else 0
+
+                            else:
+                                print("ill eagle move")
+
+
+
+
+                if ((direction1 == -1 and direction2 == 1)):
+                    for i in range(row - pos1):
+                        i = i + 1
+                        if ((gameState.board[pos1 + i][pos2 - i] != "--")):
+                            print("přeskok")
+                            jump = jump + 1
+
+                            if ((((pos1 + i + 1) == row) and ((pos2 - i - 1) == col))and jump ==1):
+                                gameState.board[row][col] = piece  # create new white piece
+                                gameState.board[row + direction1][col + direction2] = "--"
+                                gameState.board[pos1][pos2] = "--"  # remove piece
+                                main.move = 1 if main.move != 1 else 0
+
+                            else:
+                                print("ill eagle move")
+
+
+                if ((direction1 == 1 and direction2 == -1)):
+                    for i in range(pos1 - row):
+                        i = i + 1
+                        if ((gameState.board[pos1 - i][pos2 + i] != "--")):
+                            print("přeskok")
+                            jump = jump + 1
+
+                            if ((((pos1 - i - 1) == row) and ((pos2 + i + 1) == col))and jump ==1):
+                                gameState.board[row][col] = piece  # create new white piece
+                                gameState.board[row + direction1][col + direction2] = "--"
+                                gameState.board[pos1][pos2] = "--"  # remove piece
+                                main.move = 1 if main.move != 1 else 0
+
+                            else:
+                                print("ill eagle move")
+
+
+                if ((direction1 == -1 and direction2 == -1)):
+                    for i in range(row - pos1):
+                        i = i + 1
+                        if ((gameState.board[pos1 + i][pos2 + i] != "--")):
+                            print("přeskok")
+                            jump = jump + 1
+
+                            if ((((pos1 + i + 1) == row) and ((pos2 + i + 1) == col)) and jump ==1):
+                                gameState.board[row][col] = piece  # create new white piece
+                                gameState.board[row + direction1][col + direction2] = "--"
+                                gameState.board[pos1][pos2] = "--"  # remove piece
+                                main.move = 1 if main.move != 1 else 0
+
+
+                            else:
+                                print("ill eagle move")
+
+                if (jump ==0):
+                    gameState.board[row][col] = piece  # create new white piece
+                    gameState.board[pos1][pos2] = "--"  # remove piece
+                    main.move = 1 if main.move != 1 else 0
+
+
+
+
 
 
 
