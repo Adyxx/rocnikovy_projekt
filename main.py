@@ -56,6 +56,7 @@ def main():
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 piece = gameState.board[pos1][pos2]
 
+                                hungaryPawns(screen, gameState)
                                 movePiece(gameState, piece, pos1, pos2, row, col)
                                 
                         clicks = []
@@ -64,6 +65,27 @@ def main():
         drawGameState(screen, gameState, selectedSquare)
         clock.tick(30)
         p.display.flip()
+
+def hungaryPawns(screen, gameState):
+    
+    for r in range(DIMENSIONS):
+        for c in range (DIMENSIONS):
+            if gameState.board[r][c] != "--":
+                piece = gameState.board[r][c]
+                direction1 = -1 if piece == "wh" else 1
+               # if( (r + direction1 <= DIMENSIONS and r+ direction1*2 )<= DIMENSIONS and r + direction1 >=0 and (c + 2 <= DIMENSIONS and c - 2 >= 0)):
+                try:
+                    if(gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] != "--"):
+                        print("A: Nah, can't take that" + str(r+direction1) + "," +str(c+direction1))
+                    elif((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece)):
+                        print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+direction1))
+
+                    if(gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] != "--"):
+                        print("B: Nah, can't take that" + str(r+direction1) + "," +str(c+direction1))
+                    elif((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece)):
+                        print("B: Mmm... yummy" + str(r+direction1) + "," +str(c+direction1))
+                except:
+                    print("out of range")
 
 def changeColor(screen, gameState, selectedSquare):
  
@@ -79,12 +101,6 @@ def changeColor(screen, gameState, selectedSquare):
 
 def movePiece(gameState, piece, pos1, pos2, row, col):
     direction1 = 1 if piece == "wh" else -1
-
-    #for r in range (DIMENSIONS):  #musí brát
-     #   for c in range (DIMENSIONS):
-      #      if (gameState.board[r][c]):
-       #         print (gameState.board[r][c])
-
 
     if ( main.move == 1 and piece=="wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or ( main.move == 0 and piece=="bl" and (pos1 == row - 1) and ( (pos2 == col + 1) or (pos2 == col - 1)))):                                                            
         gameState.board[row][col] = piece # create new white piece
@@ -134,10 +150,6 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                         main.move = 1 if main.move != 1 else 0
 
 
-
-
-
-
                 if ((direction1 == -1 and direction2 == 1)):
                     for i in range(row - pos1):
                         i = i + 1
@@ -152,7 +164,6 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                         gameState.board[skip1][skip2] = "--"
                         gameState.board[pos1][pos2] = "--"  # remove piece
                         main.move = 1 if main.move != 1 else 0
-
 
 
                 if ((direction1 == 1 and direction2 == -1)):
@@ -171,7 +182,6 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                         main.move = 1 if main.move != 1 else 0
 
 
-
                 if ((direction1 == -1 and direction2 == -1)):
                     for i in range(row - pos1):
                         i = i + 1
@@ -188,17 +198,10 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                         main.move = 1 if main.move != 1 else 0
 
 
-
-
                 if (jump ==0):
                     gameState.board[row][col] = piece  # create new white piece
                     gameState.board[pos1][pos2] = "--"  # remove piece
                     main.move = 1 if main.move != 1 else 0
-
-
-
-
-
 
 
     if ((row == 0) and (gameState.board[row][col] == "wh") or (row == DIMENSIONS -1) and (gameState.board[row][col] == "bl") ): # promotion 
@@ -222,6 +225,8 @@ def drawGameState(screen, gameState, selectedSquare):
     drawBoard(screen)
     changeColor(screen, gameState, selectedSquare)
     drawPieces(screen, gameState.board)
+
+
 
 if __name__ == "__main__":
     main()
