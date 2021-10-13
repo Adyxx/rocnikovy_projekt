@@ -80,6 +80,12 @@ def changeColor(screen, gameState, selectedSquare):
 def movePiece(gameState, piece, pos1, pos2, row, col):
     direction1 = 1 if piece == "wh" else -1
 
+    #for r in range (DIMENSIONS):  #musí brát
+     #   for c in range (DIMENSIONS):
+      #      if (gameState.board[r][c]):
+       #         print (gameState.board[r][c])
+
+
     if ( main.move == 1 and piece=="wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or ( main.move == 0 and piece=="bl" and (pos1 == row - 1) and ( (pos2 == col + 1) or (pos2 == col - 1)))):                                                            
         gameState.board[row][col] = piece # create new white piece
         gameState.board[pos1][pos2] = "--" # remove piece
@@ -119,9 +125,9 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                             print("přeskok")
                             jump = jump+1
 
-                            if ((((pos1 - i - 1) == row) and ((pos2 - i - 1) == col))and jump ==1):
+                            if (jump ==1):
                                 gameState.board[row][col] = piece  # create new white piece
-                                gameState.board[row + direction1][col + direction2] = "--"
+                                gameState.board[pos1 - direction1][pos2 - direction2] = "--"
                                 gameState.board[pos1][pos2] = "--"  # remove piece
                                 main.move = 1 if main.move != 1 else 0
 
@@ -138,9 +144,9 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                             print("přeskok")
                             jump = jump + 1
 
-                            if ((((pos1 + i + 1) == row) and ((pos2 - i - 1) == col))and jump ==1):
+                            if (jump ==1):
                                 gameState.board[row][col] = piece  # create new white piece
-                                gameState.board[row + direction1][col + direction2] = "--"
+                                gameState.board[pos1 - direction1][pos2 - direction2] = "--"
                                 gameState.board[pos1][pos2] = "--"  # remove piece
                                 main.move = 1 if main.move != 1 else 0
 
@@ -155,9 +161,9 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                             print("přeskok")
                             jump = jump + 1
 
-                            if ((((pos1 - i - 1) == row) and ((pos2 + i + 1) == col))and jump ==1):
+                            if (jump ==1):
                                 gameState.board[row][col] = piece  # create new white piece
-                                gameState.board[row + direction1][col + direction2] = "--"
+                                gameState.board[pos1 - direction1][pos2 - direction2] = "--"
                                 gameState.board[pos1][pos2] = "--"  # remove piece
                                 main.move = 1 if main.move != 1 else 0
 
@@ -172,9 +178,9 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                             print("přeskok")
                             jump = jump + 1
 
-                            if ((((pos1 + i + 1) == row) and ((pos2 + i + 1) == col)) and jump ==1):
+                            if (jump ==1):
                                 gameState.board[row][col] = piece  # create new white piece
-                                gameState.board[row + direction1][col + direction2] = "--"
+                                gameState.board[pos1 - direction1][pos2 - direction2] = "--"
                                 gameState.board[pos1][pos2] = "--"  # remove piece
                                 main.move = 1 if main.move != 1 else 0
 
