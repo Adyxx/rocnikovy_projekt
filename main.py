@@ -100,7 +100,7 @@ def hungaryPawns(screen, gameState, pos1, pos2, row, col):
                         if ():
                             return True
                         else:
-                            return Fal
+                            return False
 
                 except:
                     print("out of range")
