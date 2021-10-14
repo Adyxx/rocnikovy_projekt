@@ -56,8 +56,9 @@ def main():
                             if (gameState.board[row][col] == "--"): # is 2. position empty?
                                 piece = gameState.board[pos1][pos2]
 
-                                hungaryPawns(screen, gameState)
-                                movePiece(gameState, piece, pos1, pos2, row, col)
+
+                                if(hungaryPawns(screen, gameState, pos1, pos2, row, col)):
+                                    movePiece(gameState, piece, pos1, pos2, row, col)
                                 
                         clicks = []
                 selectedSquare = (row, col)
@@ -66,26 +67,47 @@ def main():
         clock.tick(30)
         p.display.flip()
 
-def hungaryPawns(screen, gameState):
-    
+def hungaryPawns(screen, gameState, pos1, pos2, row, col):
+    pieces = []
+    canBeTaken = []
     for r in range(DIMENSIONS):
         for c in range (DIMENSIONS):
             if gameState.board[r][c] != "--":
                 piece = gameState.board[r][c]
+
                 direction1 = -1 if piece == "wh" else 1
                # if( (r + direction1 <= DIMENSIONS and r+ direction1*2 )<= DIMENSIONS and r + direction1 >=0 and (c + 2 <= DIMENSIONS and c - 2 >= 0)):
                 try:
-                    if(gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] != "--"):
-                        print("A: Nah, can't take that" + str(r+direction1) + "," +str(c+direction1))
-                    elif((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece)):
-                        print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+direction1))
+                    if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece)):
+                        print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+1))
+                        pieces.append(r)
+                        pieces.append(c)
 
-                    if(gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] != "--"):
-                        print("B: Nah, can't take that" + str(r+direction1) + "," +str(c+direction1))
-                    elif((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece)):
-                        print("B: Mmm... yummy" + str(r+direction1) + "," +str(c+direction1))
+                        canBeTaken.append(r+direction1)
+                        canBeTaken.append(c+1)
+                        if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                            return True
+                        else:
+                            return False
+
+                    if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece)):
+                        print("B: Mmm... yummy" + str(r+direction1) + "," +str(c-1))
+                        pieces.append(r)
+                        pieces.append(c)
+
+                        canBeTaken.append(r + direction1)
+                        canBeTaken.append(c - 1)
+                        if ():
+                            return True
+                        else:
+                            return Fal
+
                 except:
                     print("out of range")
+
+    return True
+
+
 
 def changeColor(screen, gameState, selectedSquare):
  
