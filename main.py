@@ -57,8 +57,9 @@ def main():
                                 piece = gameState.board[pos1][pos2]
 
 
-                                if(hungaryPawns(screen, gameState, pos1, pos2, row, col)):
+                                if(hungaryPawns(gameState, pos1, pos2, row, col)):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
+                                isItFinallyOver(gameState)
                                 
                         clicks = []
                 selectedSquare = (row, col)
@@ -67,7 +68,7 @@ def main():
         clock.tick(30)
         p.display.flip()
 
-def hungaryPawns(screen, gameState, pos1, pos2, row, col):
+def hungaryPawns(gameState, pos1, pos2, row, col):
     pieces = []
     canBeTaken = []
     for r in range(DIMENSIONS):
@@ -107,6 +108,20 @@ def hungaryPawns(screen, gameState, pos1, pos2, row, col):
 
     return True
 
+def isItFinallyOver(gameState):
+    white=False
+    black=False
+    for r in range(DIMENSIONS):
+        for c in range (DIMENSIONS):
+            if(gameState.board[r][c].startswith("wh")):
+                white=True
+            elif(gameState.board[r][c].startswith("bl")):
+                black=True
+            
+    if (white==False):
+        print("Black Wins!!!")
+    elif(black==False):
+        print("White Wins!!!")
 
 
 def changeColor(screen, gameState, selectedSquare):
