@@ -57,7 +57,7 @@ def main():
                                 piece = gameState.board[pos1][pos2]
 
 
-                                if(hungaryPawns(gameState, pos1, pos2, row, col)):
+                                if(hungaryPawns(gameState, pos1, pos2, row, col, main.move)):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
                                 isItFinallyOver(gameState)
                                 
@@ -68,7 +68,7 @@ def main():
         clock.tick(30)
         p.display.flip()
 
-def hungaryPawns(gameState, pos1, pos2, row, col):
+def hungaryPawns(gameState, pos1, pos2, row, col, move):
     pieces = []
     canBeTaken = []
     for r in range(DIMENSIONS):
@@ -78,33 +78,64 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
 
                 direction1 = -1 if piece == "wh" else 1
                # if( (r + direction1 <= DIMENSIONS and r+ direction1*2 )<= DIMENSIONS and r + direction1 >=0 and (c + 2 <= DIMENSIONS and c - 2 >= 0)):
-                try:
-                    if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece)):
-                        print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+1))
-                        pieces.append(r)
-                        pieces.append(c)
+                if (not piece.endswith("k")):
+                    if (move == 1 and piece.startswith("w")):
+                        try:
+                            if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece)):
+                                print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+1))
+                                pieces.append(r)
+                                pieces.append(c)
 
-                        canBeTaken.append(r+direction1)
-                        canBeTaken.append(c+1)
-                        if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
-                            return True
-                        else:
-                            return False
+                                canBeTaken.append(r+direction1)
+                                canBeTaken.append(c+1)
+                                if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                                    return True
+                                else:
+                                    return False
 
-                    if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece)):
-                        print("B: Mmm... yummy" + str(r+direction1) + "," +str(c-1))
-                        pieces.append(r)
-                        pieces.append(c)
+                            if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece)):
+                                print("B: Mmm... yummy" + str(r+direction1) + "," +str(c-1))
+                                pieces.append(r)
+                                pieces.append(c)
 
-                        canBeTaken.append(r + direction1)
-                        canBeTaken.append(c - 1)
-                        if ():
-                            return True
-                        else:
-                            return False
+                                canBeTaken.append(r + direction1)
+                                canBeTaken.append(c - 1)
+                                if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                                    return True
+                                else:
+                                    return False
 
-                except:
-                    print("out of range")
+                        except:
+                            print("out of range")
+
+                    if (move == 0 and piece.startswith("b")):
+                        try:
+                            if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece)):
+                                print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+1))
+                                pieces.append(r)
+                                pieces.append(c)
+
+                                canBeTaken.append(r+direction1)
+                                canBeTaken.append(c+1)
+                                if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                                    return True
+                                else:
+                                    return False
+
+                            if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece)):
+                                print("B: Mmm... yummy" + str(r+direction1) + "," +str(c-1))
+                                pieces.append(r)
+                                pieces.append(c)
+
+                                canBeTaken.append(r + direction1)
+                                canBeTaken.append(c - 1)
+                                if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                                    return True
+                                else:
+                                    return False
+
+                        except:
+                            print("out of range")
 
     return True
 
