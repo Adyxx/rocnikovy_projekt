@@ -139,6 +139,33 @@ def hungaryPawns(gameState, pos1, pos2, row, col, move):
 
     return True
 
+def extraTurn(gameState, r, c, move):
+    piece = gameState.board[r][c]
+    direction1 = -1 if piece == "wh" else 1
+
+    if (not piece.endswith("k")):
+        if (move == 1 and piece.startswith("w")):
+            try:
+                if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece)):
+                    print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+1))
+                    #if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                    return True
+                else:
+                    return False
+
+                if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece)):
+                    print("B: Mmm... yummy" + str(r+direction1) + "," +str(c-1))
+
+                    #if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                    return True
+                else:
+                    return False
+
+            except:
+                print("out of range")
+
+    return False
+
 def isItFinallyOver(gameState):
     white=False
     black=False
@@ -170,22 +197,25 @@ def changeColor(screen, gameState, selectedSquare):
 def movePiece(gameState, piece, pos1, pos2, row, col):
     direction1 = 1 if piece == "wh" else -1
 
-    if ( main.move == 1 and piece=="wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or ( main.move == 0 and piece=="bl" and (pos1 == row - 1) and ( (pos2 == col + 1) or (pos2 == col - 1)))):                                                            
+    if ( main.move == 1 and piece=="wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or ( main.move == 0 and piece=="bl" and (pos1 == row - 1) and ( (pos2 == col + 1) or (pos2 == col - 1)))):
         gameState.board[row][col] = piece # create new white piece
         gameState.board[pos1][pos2] = "--" # remove piece
-        main.move = 1 if main.move != 1 else 0
+        if (extraTurn(gameState, row, col, main.move) == False):
+            main.move = 1 if main.move != 1 else 0
 
-    elif (  main.move == 1 and piece=="wh" and ((pos1 == row + 2) and (pos2 == col - 2)) and (gameState.board[row+1][col-1] != "--") and ( not gameState.board[row+1][col-1].startswith("wh") ) or ( main.move == 0 and piece=="bl" and ((pos1 == row - 2) and (pos2 == col - 2)) and (gameState.board[row-1][col-1] != "--") and ( not gameState.board[row-1][col-1].startswith("bl") )) ):                     
+    elif (  main.move == 1 and piece=="wh" and ((pos1 == row + 2) and (pos2 == col - 2)) and (gameState.board[row+1][col-1] != "--") and ( not gameState.board[row+1][col-1].startswith("wh") ) or ( main.move == 0 and piece=="bl" and ((pos1 == row - 2) and (pos2 == col - 2)) and (gameState.board[row-1][col-1] != "--") and ( not gameState.board[row-1][col-1].startswith("bl") )) ):
         gameState.board[row][col] = piece # create new piece
         gameState.board[row+direction1][col-1] = "--"
         gameState.board[pos1][pos2] = "--" # remove piece
-        main.move = 1 if main.move != 1 else 0
-                 
+        if (extraTurn(gameState, row, col, main.move) == False):
+            main.move = 1 if main.move != 1 else 0
+
     elif ( main.move == 1 and piece=="wh" and ((pos1 == row + 2) and (pos2 == col + 2)) and (gameState.board[row+1][col+1] != "--") and ( not gameState.board[row+1][col+1].startswith("wh") ) or ( main.move == 0 and piece=="bl" and ((pos1 == row - 2) and (pos2 == col + 2)) and (gameState.board[row-1][col+1] != "--") and ( not gameState.board[row-1][col+1].startswith("bl"))  )) :
         gameState.board[row][col] = piece # create new white piece
         gameState.board[row+direction1][col+1] = "--"
         gameState.board[pos1][pos2] = "--" # remove piece
-        main.move = 1 if main.move != 1 else 0
+        if (extraTurn(gameState, row, col, main.move) == False):
+            main.move = 1 if main.move != 1 else 0
 
     elif (piece.endswith("k")):
 
@@ -272,7 +302,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                     main.move = 1 if main.move != 1 else 0
 
 
-    if ((row == 0) and (gameState.board[row][col] == "wh") or (row == DIMENSIONS -1) and (gameState.board[row][col] == "bl") ): # promotion 
+    if ((row == 0) and (gameState.board[row][col] == "wh") or (row == DIMENSIONS -1) and (gameState.board[row][col] == "bl") ): # promotion
         gameState.board[row][col] = str(piece)+"k"
 
 def drawBoard(screen):
