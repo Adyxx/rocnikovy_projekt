@@ -157,8 +157,32 @@ def extraTurn(gameState, r, c, move):
                     print("B: Mmm... yummy" + str(r+direction1) + "," +str(c-1))
 
                     #if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                    extraTurn.has_been_called = True
                     return True
                 else:
+                    extraTurn.has_been_called = False
+                    return False
+            except:
+                print("out of range")
+        elif (move == 0 and piece.startswith("b")):
+            try:
+                if ((gameState.board[r + direction1][c + 1] != "--" and gameState.board[r + (direction1 * 2)][
+                    c + 2] == "--") and not gameState.board[r + direction1][c + 1].startswith(piece)):
+                    print("A: Mmm... yummy" + str(r + direction1) + "," + str(c + 1))
+                    # if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                    return True
+                else:
+                       return False
+
+                if ((gameState.board[r + direction1][c - 1] != "--" and gameState.board[r + (direction1 * 2)][
+                    c - 2] == "--") and not gameState.board[r + direction1][c - 1].startswith(piece)):
+                    print("B: Mmm... yummy" + str(r + direction1) + "," + str(c - 1))
+
+                    # if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
+                    extraTurn.has_been_called = True
+                    return True
+                else:
+                    extraTurn.has_been_called = False
                     return False
 
             except:
@@ -196,7 +220,8 @@ def changeColor(screen, gameState, selectedSquare):
 
 def movePiece(gameState, piece, pos1, pos2, row, col):
     direction1 = 1 if piece == "wh" else -1
-
+    #if (extraTurn.has_been_called == True):
+     #   print("teast")
     if ( main.move == 1 and piece=="wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or ( main.move == 0 and piece=="bl" and (pos1 == row - 1) and ( (pos2 == col + 1) or (pos2 == col - 1)))):
         gameState.board[row][col] = piece # create new white piece
         gameState.board[pos1][pos2] = "--" # remove piece
