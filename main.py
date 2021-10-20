@@ -35,14 +35,22 @@ def main():
     running = True
     selectedSquare = ()  # memory
     clicks = []
+    row =0
+    col =0
+    pos1 =0
+    pos2 =0
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN:
+
+
                 location = p.mouse.get_pos()
+
                 col = location[0] // squareSize  # location 2. click
                 row = location[1] // squareSize  # location 2. click
+
 
                 if (gameState.board[row][
                     col] != "--"):  # if there is piece on the location of the player's second click...
@@ -55,6 +63,7 @@ def main():
                 else:
                     clicks.append(selectedSquare)
                     if len(clicks) == 2:
+
                         pos1 = selectedSquare[0]  # location 1. click
                         pos2 = selectedSquare[1]  # location 1. click
                         if (gameState.board[pos1][pos2] != "--"):  # does 1. position have piece?
@@ -198,10 +207,8 @@ def extraTurn(gameState, r, c, move):
                     print("B: Mmm... yummy" + str(r + direction1) + "," + str(c - 1))
 
                     # if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
-                    extraTurn.has_been_called = True
                     return True
                 else:
-                    extraTurn.has_been_called = False
                     return False
 
             except:
