@@ -56,7 +56,7 @@ def main():
                                 piece = gameState.board[pos1][pos2]
 
 
-                                if(hungaryPawns(gameState, pos1, pos2, row, col, main.move)):
+                                if(hungaryPawns(gameState, pos1, pos2, row, col)):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
                                 isItFinallyOver(gameState)
                                 
@@ -67,7 +67,7 @@ def main():
         clock.tick(30)
         p.display.flip()
 
-def hungaryPawns(gameState, pos1, pos2, row, col, move):
+def hungaryPawns(gameState, pos1, pos2, row, col):
     canBeTaken = []
     for r in range(DIMENSIONS):
         for c in range (DIMENSIONS):
@@ -78,7 +78,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col, move):
                 if (not piece.endswith("k")):
                     try:
                         # and ((r+(direction1*2))>=0 and (r+(direction1*2))<DIMENSIONS and (c-2)>=0 and (c-2)<DIMENSIONS)                 
-                        if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece) and (main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith("bl"))) and c!=DIMENSIONS-2):  
+                        if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece) and (main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith("bl"))) and c!=DIMENSIONS-2 and r!=1  and r!=DIMENSIONS-1):  
                             print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+1))
 
                             canBeTaken.append(r+direction1)
@@ -88,7 +88,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col, move):
                             else:
                                 return False
 
-                        if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece) and (main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith("bl")))and c!=1):
+                        if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece) and (main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith("bl")))and c!=1 and r!=1  and r!=DIMENSIONS-1):
                             print("B: Mmm... yummy" + str(r+direction1) + "," +str(c-1))
 
 
@@ -144,13 +144,16 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         gameState.board[row][col] = piece # create new piece
         gameState.board[row+direction1][col-1] = "--"
         gameState.board[pos1][pos2] = "--" # remove piece
-        main.move = 1 if main.move != 1 else 0
-                 
+        
+        if(hungaryPawns(gameState, pos1, pos2, row, col)==False):
+           main.move = 1 if main.move != 1 else 0 
+
     elif ( main.move == 1 and piece=="wh" and ((pos1 == row + 2) and (pos2 == col + 2)) and (gameState.board[row+1][col+1] != "--") and ( not gameState.board[row+1][col+1].startswith("wh") ) or ( main.move == 0 and piece=="bl" and ((pos1 == row - 2) and (pos2 == col + 2)) and (gameState.board[row-1][col+1] != "--") and ( not gameState.board[row-1][col+1].startswith("bl"))  )) :
         gameState.board[row][col] = piece # create new white piece
         gameState.board[row+direction1][col+1] = "--"
         gameState.board[pos1][pos2] = "--" # remove piece
-        main.move = 1 if main.move != 1 else 0
+        if(hungaryPawns(gameState, pos1, pos2, row, col)==False):
+           main.move = 1 if main.move != 1 else 0 
 
     elif (piece.endswith("k")):
 
