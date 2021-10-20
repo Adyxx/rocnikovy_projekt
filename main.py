@@ -73,11 +73,12 @@ def hungaryPawns(gameState, pos1, pos2, row, col, move):
         for c in range (DIMENSIONS):
             if gameState.board[r][c] != "--":
                 piece = gameState.board[r][c]
-
+                
                 direction1 = -1 if piece == "wh" else 1
                 if (not piece.endswith("k")):
                     try:
-                        if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece) and (main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith("bl")))):
+                        # and ((r+(direction1*2))>=0 and (r+(direction1*2))<DIMENSIONS and (c-2)>=0 and (c-2)<DIMENSIONS)                 
+                        if((gameState.board[r+direction1][c+1] != "--" and gameState.board[r+(direction1*2)][c+2] == "--") and not gameState.board[r+direction1][c+1].startswith(piece) and (main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith("bl"))) and c!=DIMENSIONS-2):  
                             print("A: Mmm... yummy" + str(r+direction1) + "," +str(c+1))
 
                             canBeTaken.append(r+direction1)
@@ -87,7 +88,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col, move):
                             else:
                                 return False
 
-                        if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece) and (main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith("bl")))):
+                        if((gameState.board[r+direction1][c-1] != "--" and gameState.board[r+(direction1*2)][c-2] == "--") and not gameState.board[r+direction1][c-1].startswith(piece) and (main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith("bl")))and c!=1):
                             print("B: Mmm... yummy" + str(r+direction1) + "," +str(c-1))
 
 
