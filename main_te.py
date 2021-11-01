@@ -89,12 +89,10 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                 print("test")
 
                 return True
-
-
-
-
-
-            elif ((gameState.board[main.exTurnPiece[0] + direction1][main.exTurnPiece[1] - 1] != "--" and
+        except:
+            print("ex")
+        try:
+            if ((gameState.board[main.exTurnPiece[0] + direction1][main.exTurnPiece[1] - 1] != "--" and
                    gameState.board[main.exTurnPiece[0] + (direction1 * 2)][main.exTurnPiece[1] - 2] == "--") and not
                   gameState.board[main.exTurnPiece[0] + direction1][main.exTurnPiece[1] - 1].startswith(piece) and (
                           main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith(
@@ -105,7 +103,8 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                 main.exTurn = 0
                 return False
         except:
-            print("ETATEOPATPGEAGJKPQEG OAWERJG AWRIO haw")
+            print("ex")
+            main.exTurn = 0
 
     else:
         main.canBeTaken = []
@@ -199,7 +198,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
             gameState.board[row + 1][col - 1] != "--") and (not gameState.board[row + 1][col - 1].startswith("wh")) or (
                   main.move == 0 and piece == "bl" and ((pos1 == row - 2) and (pos2 == col - 2)) and (
                   gameState.board[row - 1][col - 1] != "--") and (
-                  not gameState.board[row - 1][col - 1].startswith("bl")))  and ((main.exTurnPiece[0] == row) and main.exTurnPiece[1] == col)):
+                  not gameState.board[row - 1][col - 1].startswith("bl")))):
         gameState.board[row][col] = piece  # create new piece
         gameState.board[row + direction1][col - 1] = "--"
         gameState.board[pos1][pos2] = "--"  # remove piece
@@ -217,7 +216,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
             gameState.board[row + 1][col + 1] != "--") and (not gameState.board[row + 1][col + 1].startswith("wh")) or (
                   main.move == 0 and piece == "bl" and ((pos1 == row - 2) and (pos2 == col + 2)) and (
                   gameState.board[row - 1][col + 1] != "--") and (
-                  not gameState.board[row - 1][col + 1].startswith("bl")))  and ((main.exTurnPiece[0] == row) and main.exTurnPiece[1] == col)):
+                  not gameState.board[row - 1][col + 1].startswith("bl")))):
         gameState.board[row][col] = piece  # create new white piece
         gameState.board[row + direction1][col + 1] = "--"
         gameState.board[pos1][pos2] = "--"  # remove piece
