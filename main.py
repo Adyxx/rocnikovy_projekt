@@ -184,7 +184,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
     direction1 = 1 if piece == "wh" else -1
 
     print(main.exTurnPiece)
-    if (main.exTurnPiece != [] and pos1 != main.exTurnPiece[0] and pos2 != main.exTurnPiece[1]):
+    if (main.exTurnPiece != [] and (pos1 != main.exTurnPiece[0] or pos2 != main.exTurnPiece[1])):
         print("wrong piece")
 
 
