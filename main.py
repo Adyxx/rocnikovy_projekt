@@ -105,6 +105,8 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
         except:
             print("ex")
             main.exTurn = 0
+            return False
+
 
     else:
         main.canBeTaken = []
@@ -120,7 +122,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                  gameState.board[r + (direction1 * 2)][c + 2] == "--") and not
                             gameState.board[r + direction1][c + 1].startswith(piece) and (
                                     main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith(
-                                    "bl"))) and c != DIMENSIONS - 2 and r != 1 and r != DIMENSIONS - 1):
+                                    "bl")))):
                                 print("A: Mmm... yummy" + str(r + direction1) + "," + str(c + 1))
                                 main.canBeTaken.append(r + direction1)
                                 main.canBeTaken.append(c + 1)
@@ -135,7 +137,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                  gameState.board[r + (direction1 * 2)][c - 2] == "--") and not
                             gameState.board[r + direction1][c - 1].startswith(piece) and (
                                     main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith(
-                                    "bl"))) and c != 1 and r != 1 and r != DIMENSIONS - 1):
+                                    "bl"))) ):
                                 print("B: Mmm... yummy" + str(r + direction1) + "," + str(c - 1))
                                 main.canBeTaken.append(r + direction1)
                                 main.canBeTaken.append(c - 1)
@@ -188,11 +190,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         print("wrong piece")
 
 
-    elif (main.exTurn == 0 and (main.move == 1 and piece == "wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or (
-            main.move == 0 and piece == "bl" and (pos1 == row - 1) and ((pos2 == col + 1) or (pos2 == col - 1))) )):
-        gameState.board[row][col] = piece  # create new white piece
-        gameState.board[pos1][pos2] = "--"  # remove piece
-        main.move = 1 if main.move != 1 else 0
+
 
     elif (main.move == 1 and piece == "wh" and ((pos1 == row + 2) and (pos2 == col - 2)) and (
             gameState.board[row + 1][col - 1] != "--") and (not gameState.board[row + 1][col - 1].startswith("wh")) or (
@@ -229,6 +227,13 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
             if (main.exTurn == 0):
                 main.exTurnPiece = []
                 main.move = 1 if main.move != 1 else 0
+
+    elif (main.exTurn == 0 and (main.move == 1 and piece == "wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or (
+            main.move == 0 and piece == "bl" and (pos1 == row - 1) and ((pos2 == col + 1) or (pos2 == col - 1))) )):
+
+        gameState.board[row][col] = piece  # create new white piece
+        gameState.board[pos1][pos2] = "--"  # remove piece
+        main.move = 1 if main.move != 1 else 0
 
     elif (piece.endswith("k")):
 
