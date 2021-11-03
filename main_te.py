@@ -187,7 +187,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
 
         for r in range(DIMENSIONS):
             for c in range(DIMENSIONS):
-                r=5
+
                 if gameState.board[r][c] != "--":
                     piece = gameState.board[r][c]
                     direction1 = -1 if piece == "wh" else 1
@@ -204,8 +204,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                 main.canBeTaken.append(c + 1)
                                 if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (
                                         pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
-                                    main.exTurnPiece[0] = row
-                                    main.exTurnPiece[1] = col
+
                                     return True
                                 else:
                                     return False
@@ -219,8 +218,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                 main.canBeTaken.append(c - 1)
                                 if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (
                                         pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
-                                    main.exTurnPiece[0] = row
-                                    main.exTurnPiece[1] = col
+
                                     return True
                                 else:
                                     return False
@@ -233,6 +231,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                 return True
                             else:
                                 return False
+        return True
 
 
 
