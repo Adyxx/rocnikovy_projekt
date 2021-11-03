@@ -32,6 +32,7 @@ def main():
     main.exTurn = 0
     main.exTurnPiece = []
     main.canBeTaken = []
+    main.end = 0
     gameState = board.GameState()
     loadImages()
     running = True
@@ -153,6 +154,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
 def isItFinallyOver(gameState):
     white = False
     black = False
+    
     for r in range(DIMENSIONS):
         for c in range(DIMENSIONS):
             if (gameState.board[r][c].startswith("wh")):
@@ -162,8 +164,10 @@ def isItFinallyOver(gameState):
 
     if (white == False):
         print("Black Wins!!!")
+        main.end = 1
     elif (black == False):
         print("White Wins!!!")
+        main.end = 1
 
 
 def changeColor(screen, gameState, selectedSquare):
@@ -334,9 +338,14 @@ def drawPieces(screen, board):
 
 
 def drawGameState(screen, gameState, selectedSquare):
-    drawBoard(screen)
-    changeColor(screen, gameState, selectedSquare)
-    drawPieces(screen, gameState.board)
+    text = p.font.SysFont('Corbel', 35).render('END' , True , (200,200,200))
+    if(main.end == 0):
+        drawBoard(screen)
+        changeColor(screen, gameState, selectedSquare)
+        drawPieces(screen, gameState.board)
+    else:
+        screen.fill((0,0,0))
+        screen.blit(text , (226,100)) 
 
 
 if __name__ == "__main__":
