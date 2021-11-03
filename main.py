@@ -46,8 +46,7 @@ def main():
                 col = location[0] // squareSize  # location 2. click
                 row = location[1] // squareSize  # location 2. click
 
-                if (gameState.board[row][
-                    col] != "--"):  # if there is piece on the location of the player's second click...
+                if (gameState.board[row][col] != "--"):  # if there is piece on the location of the player's second click...
                     clicks = []  # then remove click memory
                 # this fixes problem where player clicks a piece and then other piece that wouldn't move
 
@@ -66,6 +65,7 @@ def main():
                                 if (hungaryPawns(gameState, pos1, pos2, row, col)):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
                                 isItFinallyOver(gameState)
+                                
 
                         clicks = []
                 selectedSquare = (row, col)
@@ -167,18 +167,16 @@ def isItFinallyOver(gameState):
 
 
 def changeColor(screen, gameState, selectedSquare):
+
     if selectedSquare != ():  # if square is clicked.... (if square is not empty)
         r, c = selectedSquare
-
         if (gameState.board[r][c] != "--"):  # if selected square has a piece....
-            if ((main.move == 1 and gameState.board[r][c] != "bl" and gameState.board[r][c] != "blk") or (
-                    main.move == 0 and gameState.board[r][c] != "wh" and gameState.board[r][
-                c] != "whk")):  # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
+            if ((main.exTurnPiece == [] and (main.move == 1 and not gameState.board[r][c].startswith("b") ) or (main.move == 0 and not gameState.board[r][c].startswith("w"))) or (main.exTurnPiece != [] and r == main.exTurnPiece[0] and c == main.exTurnPiece[1])):  # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
                 s = p.Surface((WIDTH / DIMENSIONS, WIDTH / DIMENSIONS))
                 s.set_alpha(170)  # set opacity
                 s.fill(p.Color('red'))  # set color
                 screen.blit(s, (c * (WIDTH / DIMENSIONS), (r * WIDTH / DIMENSIONS)))
-
+        
 
 def movePiece(gameState, piece, pos1, pos2, row, col):
     direction1 = 1 if piece == "wh" else -1
@@ -202,10 +200,10 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         gameState.board[row][col] = piece  # create new piece
         gameState.board[row + direction1][col - 1] = "--"
         gameState.board[pos1][pos2] = "--"  # remove piece
+
         main.exTurnPiece.append(row)
         main.exTurnPiece.append(col)
         main.exTurn = 1
-
 
         if (hungaryPawns(gameState, pos1, pos2, row, col) == False):
             if (main.exTurn ==0):
@@ -220,7 +218,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         gameState.board[row][col] = piece  # create new white piece
         gameState.board[row + direction1][col + 1] = "--"
         gameState.board[pos1][pos2] = "--"  # remove piece
-
+         
         main.exTurn = 1
         main.exTurnPiece.append(row)
         main.exTurnPiece.append(col)
@@ -317,6 +315,8 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
     print(main.canBeTaken)
     print(main.exTurnPiece)
     print(main.exTurn)
+
+
 def drawBoard(screen):
     colors = [p.Color(235, 235, 208), p.Color(120, 188, 227)]
     for r in range(DIMENSIONS):
