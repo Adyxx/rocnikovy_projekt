@@ -66,6 +66,8 @@ def main():
 
                                 if (hungaryPawns(gameState, pos1, pos2, row, col)):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
+                                elif(hungaryKings(gameState, pos1, pos2, row, col,pos1,pos2, piece)):
+                                    movePiece(gameState, piece, pos1, pos2, row, col)
                                 isItFinallyOver(gameState)
 
                         clicks = []
@@ -145,6 +147,7 @@ def hungaryKings(gameState, pos1, pos2, row, col,r,c, piece):
 
             except:
                 print("out of range")
+
     return False
 
 
@@ -228,6 +231,12 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
 
                         if (hungaryKings(gameState, pos1, pos2, row, col, r, c, piece)):
                             if(gameState.board[pos1][pos2].endswith("k")):
+                                return False
+                            else:
+                                return True
+
+                        else:
+                            if (gameState.board[pos1][pos2].endswith("k")):
                                 return True
                             else:
                                 return False
@@ -393,7 +402,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                         gameState.board[pos1][pos2] = "--"  # remove piece
                         main.move = 1 if main.move != 1 else 0
 
-                elif (jump == 0 and  hungaryPawns(gameState, pos1, pos2, row, col) == True):
+                elif (jump == 0 and  hungaryPawns(gameState, pos1, pos2, row, col) == False):
                     gameState.board[row][col] = piece  # create new white piece
                     gameState.board[pos1][pos2] = "--"  # remove piece
                     main.move = 1 if main.move != 1 else 0
