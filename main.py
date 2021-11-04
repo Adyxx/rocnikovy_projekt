@@ -64,9 +64,9 @@ def main():
                             if (gameState.board[row][col] == "--"):  # is 2. position empty?
                                 piece = gameState.board[pos1][pos2]
 
-                                if (hungaryPawns(gameState, pos1, pos2, row, col)):
+                                if (hungaryPawns(gameState, pos1, pos2, row, col) == True):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
-                                elif(hungaryKings(gameState, pos1, pos2, row, col,pos1,pos2, piece)):
+                                elif(gameState.board[pos1][pos2].endswith("k") and hungaryPawns(gameState, pos1, pos2, row, col)):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
                                 isItFinallyOver(gameState)
 
@@ -231,15 +231,15 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
 
                         if (hungaryKings(gameState, pos1, pos2, row, col, r, c, piece)):
                             if(gameState.board[pos1][pos2].endswith("k")):
-                                return False
-                            else:
                                 return True
+                            else:
+                                return False
 
                         else:
                             if (gameState.board[pos1][pos2].endswith("k")):
-                                return True
-                            else:
                                 return False
+                            else:
+                                return True
         return True
 
 
