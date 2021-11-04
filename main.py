@@ -79,7 +79,7 @@ def main():
 
 def hungaryKings(gameState, pos1, pos2, row, col,r,c, piece):
 
-    for plus in range(abs(row-pos1)):
+    for plus in range(DIMENSIONS):
         plus= plus+1
         if (r - plus >= 0):
             try:
@@ -190,7 +190,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
 
         for r in range(DIMENSIONS):
             for c in range(DIMENSIONS):
-
+                r=7
                 if gameState.board[r][c] != "--":
                     piece = gameState.board[r][c]
                     direction1 = -1 if piece == "wh" else 1
