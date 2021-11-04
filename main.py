@@ -190,14 +190,13 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
 
         for r in range(DIMENSIONS):
             for c in range(DIMENSIONS):
-
                 if gameState.board[r][c] != "--":
                     piece = gameState.board[r][c]
                     direction1 = -1 if piece == "wh" else 1
                     if (not piece.endswith("k")):
                         try:
                             # and ((r+(direction1*2))>=0 and (r+(direction1*2))<DIMENSIONS and (c-2)>=0 and (c-2)<DIMENSIONS)
-                            if ((gameState.board[r + direction1][c + 1] != "--" and
+                            if ((r+direction1>=0 and c+1>=0 and c+1 < DIMENSIONS and r+direction1<DIMENSIONS)and(gameState.board[r + direction1][c + 1] != "--" and
                                  gameState.board[r + (direction1 * 2)][c + 2] == "--") and not
                             gameState.board[r + direction1][c + 1].startswith(piece) and (
                                     main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith(
@@ -211,7 +210,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                     return True
                                 else:
                                     return False
-                            elif ((gameState.board[r + direction1][c - 1] != "--" and
+                            elif ((r>=0 and c-1>=0)and(gameState.board[r + direction1][c - 1] != "--" and
                                  gameState.board[r + (direction1 * 2)][c - 2] == "--") and not
                             gameState.board[r + direction1][c - 1].startswith(piece) and (
                                     main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith(
