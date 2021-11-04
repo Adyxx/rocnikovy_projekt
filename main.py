@@ -64,7 +64,9 @@ def main():
                             if (gameState.board[row][col] == "--"):  # is 2. position empty?
                                 piece = gameState.board[pos1][pos2]
 
-                                if (hungaryPawns(gameState, pos1, pos2, row, col)):
+                                if (hungaryPawns(gameState, pos1, pos2, row, col) == True):
+                                    movePiece(gameState, piece, pos1, pos2, row, col)
+                                elif(gameState.board[pos1][pos2].endswith("k") and hungaryPawns(gameState, pos1, pos2, row, col)):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
                                 isItFinallyOver(gameState)
                                 
@@ -78,7 +80,7 @@ def main():
 
 def hungaryKings(gameState, pos1, pos2, row, col,r,c, piece):
 
-    for plus in range(abs(row-pos1)):
+    for plus in range(DIMENSIONS):
         plus= plus+1
         if (r - plus >= 0):
             try:
@@ -146,6 +148,7 @@ def hungaryKings(gameState, pos1, pos2, row, col,r,c, piece):
 
             except:
                 print("out of range")
+
     return False
 
 
@@ -232,6 +235,12 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                 return True
                             else:
                                 return False
+
+                        else:
+                            if (gameState.board[pos1][pos2].endswith("k")):
+                                return False
+                            else:
+                                return True
         return True
 
 
@@ -395,7 +404,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                         gameState.board[pos1][pos2] = "--"  # remove piece
                         main.move = 1 if main.move != 1 else 0
 
-                elif (jump == 0 and  hungaryPawns(gameState, pos1, pos2, row, col) == True):
+                elif (jump == 0 and  hungaryPawns(gameState, pos1, pos2, row, col) == False):
                     gameState.board[row][col] = piece  # create new white piece
                     gameState.board[pos1][pos2] = "--"  # remove piece
                     main.move = 1 if main.move != 1 else 0
