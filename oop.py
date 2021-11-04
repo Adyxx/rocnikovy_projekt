@@ -30,7 +30,15 @@ class Piece:
         pass
 
     def move(self):
-        pass
+        if (gameState.board[p.mouse.get_pos()[1] // squareSize][p.mouse.get_pos()[0] // squareSize] != "--"):
+            main.clicks = [] 
+        main.clicks.append((p.mouse.get_pos()[1] // squareSize, p.mouse.get_pos()[0] // squareSize))
+        if len(main.clicks) == 2:
+            if (gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--"):
+                if (gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--"):
+                    gameState.board[main.clicks[1][0]][main.clicks[1][1]] = gameState.board[main.clicks[0][0]][main.clicks[0][1]]
+                    gameState.board[main.clicks[0][0]][main.clicks[0][1]] = "--"
+            main.clicks = []
 
 def loadImages():
     pieces = ["wh", "bl", "whk", "blk"]
@@ -59,4 +67,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
