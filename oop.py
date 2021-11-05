@@ -30,7 +30,8 @@ class Board:
 
     def drawHighlight(self):
         if main.clicks != []:
-            if (gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--"):
+            orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
+            if (gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):
                 s = p.Surface((WIDTH / DIMENSIONS, WIDTH / DIMENSIONS))
                 s.set_alpha(200)  # set opacity
                 s.fill(p.Color('deepskyblue3'))  # set color
@@ -47,7 +48,7 @@ class Piece:
     def getValidMoves(self):
         if len(main.clicks) == 2:
             orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
-            if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1) and gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--"):
+            if ((orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False) and main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1) and gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--"):
                 main.validMove = True
 
     def move(self):
@@ -55,8 +56,9 @@ class Piece:
             if (main.validMove):
                 gameState.board[main.clicks[1][0]][main.clicks[1][1]] = gameState.board[main.clicks[0][0]][main.clicks[0][1]]
                 gameState.board[main.clicks[0][0]][main.clicks[0][1]] = "--"
+                main.validMove = False
+                main.whiteToMove = False if main.whiteToMove != False else True
             main.clicks = []
-            main.validMove = False
 
 def loadImages():
     pieces = ["wh", "bl", "whk", "blk"]
