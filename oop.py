@@ -1,5 +1,6 @@
 import pygame as p
 import board
+from main import isItFinallyOver
 
 WIDTH = 512
 HEIGHT = WIDTH
@@ -48,9 +49,18 @@ class Piece:
     def getValidMoves(self):
         if len(main.clicks) == 2:
             orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
-            if ((orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False) and main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1) and gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--"):
-                main.validMove = True
-
+            opPiece = "wh" if orientation == -1 else "bl"
+            if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):
+                if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
+                    main.validMove = True
+               
+                if (main.clicks[0][0] == main.clicks[1][0]+(orientation*2)):
+                    if(main.clicks[0][1] == main.clicks[1][1]+2):
+                        if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] == opPiece):
+                            main.validMove = True
+                    if(main.clicks[0][1] == main.clicks[1][1]-2):
+                        if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] == opPiece):
+                            main.validMove = True
     def move(self):
         if len(main.clicks) == 2:
             if (main.validMove):
@@ -85,7 +95,7 @@ def main():
                 piece.move()
 
         board.drawBoard()
-        board.drawHighlight() 
+        board.drawHighlight()
         board.drawPieces() 
         p.display.flip()
         clock.tick(30)
