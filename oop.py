@@ -1,6 +1,5 @@
 import pygame as p
 import board
-from main import isItFinallyOver
 
 WIDTH = 512
 HEIGHT = WIDTH
@@ -57,9 +56,11 @@ class Piece:
                 if (main.clicks[0][0] == main.clicks[1][0]+(orientation*2)):
                     if(main.clicks[0][1] == main.clicks[1][1]+2):
                         if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] == opPiece):
+                            gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] = "--"
                             main.validMove = True
                     if(main.clicks[0][1] == main.clicks[1][1]-2):
                         if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] == opPiece):
+                            gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] = "--"
                             main.validMove = True
     def move(self):
         if len(main.clicks) == 2:
