@@ -1,6 +1,6 @@
 import pygame as p
 import board
-
+import ai
 WIDTH = 512
 HEIGHT = WIDTH
 DIMENSIONS = 8
@@ -35,11 +35,15 @@ def main():
     main.canBeTaken = []
     main.end = 0
     gameState = board.GameState()
+    aidam = ai
     loadImages()
     running = True
     selectedSquare = ()  # memory
     clicks = []
     while running:
+        if (main.move == 0):
+            gameState = aidam.eidam(gameState)
+            main.move = 1
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
