@@ -24,6 +24,7 @@ def loadImages():
 
 
 def main():
+
     p.init()
     screen = p.display.set_mode((WIDTH, HEIGHT))
     screen.fill(p.Color("white"))
@@ -32,6 +33,7 @@ def main():
     main.exTurn = 0
     main.exTurnPiece = []
     main.canBeTaken = []
+    main.end = 0
     gameState = board.GameState()
     loadImages()
     running = True
@@ -46,8 +48,7 @@ def main():
                 col = location[0] // squareSize  # location 2. click
                 row = location[1] // squareSize  # location 2. click
 
-                if (gameState.board[row][
-                    col] != "--"):  # if there is piece on the location of the player's second click...
+                if (gameState.board[row][col] != "--"):  # if there is piece on the location of the player's second click...
                     clicks = []  # then remove click memory
                 # this fixes problem where player clicks a piece and then other piece that wouldn't move
 
@@ -63,9 +64,12 @@ def main():
                             if (gameState.board[row][col] == "--"):  # is 2. position empty?
                                 piece = gameState.board[pos1][pos2]
 
-                                if (hungaryPawns(gameState, pos1, pos2, row, col)):
+                                if (hungaryPawns(gameState, pos1, pos2, row, col) == True):
+                                    movePiece(gameState, piece, pos1, pos2, row, col)
+                                elif(gameState.board[pos1][pos2].endswith("k") and hungaryPawns(gameState, pos1, pos2, row, col)):
                                     movePiece(gameState, piece, pos1, pos2, row, col)
                                 isItFinallyOver(gameState)
+                                
 
                         clicks = []
                 selectedSquare = (row, col)
@@ -74,8 +78,82 @@ def main():
         clock.tick(30)
         p.display.flip()
 
+def hungaryKings(gameState, pos1, pos2, row, col,r,c, piece):
+
+    for plus in range(DIMENSIONS):
+        plus= plus+1
+        if (r - plus >= 0):
+            try:
+                if ((gameState.board[r - plus][c + plus] != "--" and
+                     gameState.board[r - plus - 1][c + plus + 1] != "--")):
+                    return True
+
+                elif ((gameState.board[r + plus][c + plus] != "--" and
+                       gameState.board[r + plus + 1][c + plus + 1] != "--")):
+                    return True
+                elif ((gameState.board[r - plus][c - plus] != "--" and
+                       gameState.board[r - plus - 1][c - plus - 1] != "--")):
+                    return True
+                elif ((gameState.board[r + plus][c + plus] != "--" and
+                       gameState.board[r + plus + 1][c + plus + 1] != "--")):
+                    return True
+
+                if (row > pos1 and col > pos2):
+                    if ((gameState.board[r + plus][c + plus] != "--" and
+                         gameState.board[r + plus + 1][c + plus + 1] == "--") and not
+                    gameState.board[r + plus][c + plus].startswith(piece) and (
+                            main.move == 1 and piece.startswith("wh") or (
+                            main.move == 0 and piece.startswith(
+                        "bl")))):
+                        print("KA: Mmm... yummy" + str(r + plus) + "," + str(c + plus))
+                        main.canBeTaken.append(r + plus)
+                        main.canBeTaken.append(c + plus)
+                        return True
+                if (row > pos1 and col < pos2):
+                    if ((gameState.board[r + plus][c - plus] != "--" and
+                         gameState.board[r + plus + 1][c - plus - 1] == "--") and not
+                    gameState.board[r + plus][c - plus].startswith(piece) and (
+                            main.move == 1 and piece.startswith("wh") or (
+                            main.move == 0 and piece.startswith(
+                        "bl")))):
+                        print("KAA: Mmm... yummy" + str(r + plus) + "," + str(c - plus))
+                        main.canBeTaken.append(r + plus)
+                        main.canBeTaken.append(c - plus)
+                        return True
+
+                if (row < pos1 and col > pos2):
+                    if ((gameState.board[r - plus][c + plus] != "--" and
+                         gameState.board[r - plus - 1][c + plus + 1] == "--") and not
+                    gameState.board[r - plus][c + plus].startswith(piece) and (
+                            main.move == 1 and piece.startswith("wh") or (
+                            main.move == 0 and piece.startswith(
+                        "bl")))):
+                        print("KAAAA: Mmm... yummy" + str(r - plus) + "," + str(c + plus))
+                        main.canBeTaken.append(r - plus)
+                        main.canBeTaken.append(c + plus)
+                        return True
+
+                if (row < pos1 and col < pos2):
+                    if ((gameState.board[r - plus][c - plus] != "--" and
+                         gameState.board[r - plus - 1][c - plus - 1] == "--") and not
+                    gameState.board[r - plus][c - plus].startswith(piece) and (
+                            main.move == 1 and piece.startswith("wh") or (
+                            main.move == 0 and piece.startswith(
+                        "bl")))):
+                        print("KAAAAA: Mmm... yummy" + str(r - plus) + "," + str(c - plus))
+                        main.canBeTaken.append(r - plus)
+                        main.canBeTaken.append(c - plus)
+                        return True
+
+
+            except:
+                print("out of range")
+
+    return False
+
 
 def hungaryPawns(gameState, pos1, pos2, row, col):
+
     if(main.exTurn == 1):
         try:
             piece = gameState.board[main.exTurnPiece[0]][main.exTurnPiece[1]]
@@ -105,11 +183,15 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
         except:
             print("ex")
             main.exTurn = 0
+            return False
+
 
     else:
         main.canBeTaken = []
+
         for r in range(DIMENSIONS):
             for c in range(DIMENSIONS):
+
                 if gameState.board[r][c] != "--":
                     piece = gameState.board[r][c]
                     direction1 = -1 if piece == "wh" else 1
@@ -120,14 +202,13 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                  gameState.board[r + (direction1 * 2)][c + 2] == "--") and not
                             gameState.board[r + direction1][c + 1].startswith(piece) and (
                                     main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith(
-                                    "bl"))) and c != DIMENSIONS - 2 and r != 1 and r != DIMENSIONS - 1):
+                                    "bl")))):
                                 print("A: Mmm... yummy" + str(r + direction1) + "," + str(c + 1))
                                 main.canBeTaken.append(r + direction1)
                                 main.canBeTaken.append(c + 1)
                                 if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (
                                         pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
-                                    main.exTurnPiece[0] = row
-                                    main.exTurnPiece[1] = col
+
                                     return True
                                 else:
                                     return False
@@ -135,24 +216,39 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                  gameState.board[r + (direction1 * 2)][c - 2] == "--") and not
                             gameState.board[r + direction1][c - 1].startswith(piece) and (
                                     main.move == 1 and piece.startswith("wh") or (main.move == 0 and piece.startswith(
-                                    "bl"))) and c != 1 and r != 1 and r != DIMENSIONS - 1):
+                                    "bl"))) ):
                                 print("B: Mmm... yummy" + str(r + direction1) + "," + str(c - 1))
                                 main.canBeTaken.append(r + direction1)
                                 main.canBeTaken.append(c - 1)
                                 if ((pos1 + 2 == row and pos2 + 2 == col) or (pos1 + 2 == row and pos2 - 2 == col) or (
                                         pos1 - 2 == row and pos2 + 2 == col) or (pos1 - 2 == row and pos2 - 2 == col)):
-                                    main.exTurnPiece[0] = row
-                                    main.exTurnPiece[1] = col
+
                                     return True
                                 else:
                                     return False
                         except:
                             print("out of range")
+                    else:
+
+                        if (hungaryKings(gameState, pos1, pos2, row, col, r, c, piece)):
+                            if(gameState.board[pos1][pos2].endswith("k")):
+                                return True
+                            else:
+                                return False
+
+                        else:
+                            if (gameState.board[pos1][pos2].endswith("k")):
+                                return False
+                            else:
+                                return True
         return True
+
+
 
 def isItFinallyOver(gameState):
     white = False
     black = False
+    
     for r in range(DIMENSIONS):
         for c in range(DIMENSIONS):
             if (gameState.board[r][c].startswith("wh")):
@@ -162,23 +258,23 @@ def isItFinallyOver(gameState):
 
     if (white == False):
         print("Black Wins!!!")
+        main.end = 1
     elif (black == False):
         print("White Wins!!!")
+        main.end = 1
 
 
 def changeColor(screen, gameState, selectedSquare):
+
     if selectedSquare != ():  # if square is clicked.... (if square is not empty)
         r, c = selectedSquare
-
         if (gameState.board[r][c] != "--"):  # if selected square has a piece....
-            if ((main.move == 1 and gameState.board[r][c] != "bl" and gameState.board[r][c] != "blk") or (
-                    main.move == 0 and gameState.board[r][c] != "wh" and gameState.board[r][
-                c] != "whk")):  # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
+            if ((main.exTurnPiece == [] and (main.move == 1 and not gameState.board[r][c].startswith("b") ) or (main.move == 0 and not gameState.board[r][c].startswith("w"))) or (main.exTurnPiece != [] and r == main.exTurnPiece[0] and c == main.exTurnPiece[1])):  # highlight only black pieces if it's Black's turn or only white pieces if it's White's turn
                 s = p.Surface((WIDTH / DIMENSIONS, WIDTH / DIMENSIONS))
                 s.set_alpha(170)  # set opacity
                 s.fill(p.Color('red'))  # set color
                 screen.blit(s, (c * (WIDTH / DIMENSIONS), (r * WIDTH / DIMENSIONS)))
-
+        
 
 def movePiece(gameState, piece, pos1, pos2, row, col):
     direction1 = 1 if piece == "wh" else -1
@@ -188,11 +284,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         print("wrong piece")
 
 
-    elif (main.exTurn == 0 and (main.move == 1 and piece == "wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or (
-            main.move == 0 and piece == "bl" and (pos1 == row - 1) and ((pos2 == col + 1) or (pos2 == col - 1))) )):
-        gameState.board[row][col] = piece  # create new white piece
-        gameState.board[pos1][pos2] = "--"  # remove piece
-        main.move = 1 if main.move != 1 else 0
+
 
     elif (main.move == 1 and piece == "wh" and ((pos1 == row + 2) and (pos2 == col - 2)) and (
             gameState.board[row + 1][col - 1] != "--") and (not gameState.board[row + 1][col - 1].startswith("wh")) or (
@@ -202,10 +294,10 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         gameState.board[row][col] = piece  # create new piece
         gameState.board[row + direction1][col - 1] = "--"
         gameState.board[pos1][pos2] = "--"  # remove piece
+
         main.exTurnPiece.append(row)
         main.exTurnPiece.append(col)
         main.exTurn = 1
-
 
         if (hungaryPawns(gameState, pos1, pos2, row, col) == False):
             if (main.exTurn ==0):
@@ -220,7 +312,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
         gameState.board[row][col] = piece  # create new white piece
         gameState.board[row + direction1][col + 1] = "--"
         gameState.board[pos1][pos2] = "--"  # remove piece
-
+         
         main.exTurn = 1
         main.exTurnPiece.append(row)
         main.exTurnPiece.append(col)
@@ -229,6 +321,13 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
             if (main.exTurn == 0):
                 main.exTurnPiece = []
                 main.move = 1 if main.move != 1 else 0
+
+    elif (main.exTurn == 0 and (main.move == 1 and piece == "wh" and (pos1 == row + 1) and ((pos2 == col + 1) or (pos2 == col - 1)) or (
+            main.move == 0 and piece == "bl" and (pos1 == row - 1) and ((pos2 == col + 1) or (pos2 == col - 1))) )):
+
+        gameState.board[row][col] = piece  # create new white piece
+        gameState.board[pos1][pos2] = "--"  # remove piece
+        main.move = 1 if main.move != 1 else 0
 
     elif (piece.endswith("k")):
 
@@ -305,7 +404,7 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
                         gameState.board[pos1][pos2] = "--"  # remove piece
                         main.move = 1 if main.move != 1 else 0
 
-                if (jump == 0):
+                elif (jump == 0 and  hungaryPawns(gameState, pos1, pos2, row, col) == False):
                     gameState.board[row][col] = piece  # create new white piece
                     gameState.board[pos1][pos2] = "--"  # remove piece
                     main.move = 1 if main.move != 1 else 0
@@ -317,6 +416,8 @@ def movePiece(gameState, piece, pos1, pos2, row, col):
     print(main.canBeTaken)
     print(main.exTurnPiece)
     print(main.exTurn)
+
+
 def drawBoard(screen):
     colors = [p.Color(235, 235, 208), p.Color(120, 188, 227)]
     for r in range(DIMENSIONS):
@@ -334,9 +435,14 @@ def drawPieces(screen, board):
 
 
 def drawGameState(screen, gameState, selectedSquare):
-    drawBoard(screen)
-    changeColor(screen, gameState, selectedSquare)
-    drawPieces(screen, gameState.board)
+    text = p.font.SysFont('Corbel', 35).render('END' , True , (200,200,200))
+    if(main.end == 0):
+        drawBoard(screen)
+        changeColor(screen, gameState, selectedSquare)
+        drawPieces(screen, gameState.board)
+    else:
+        screen.fill((0,0,0))
+        screen.blit(text , (226,100)) 
 
 
 if __name__ == "__main__":
