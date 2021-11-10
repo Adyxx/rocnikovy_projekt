@@ -31,6 +31,8 @@ def move(gameState, piece, pos1, pos2, row, col):
 
 def bestMove(gameState):
     i =0
+    r_save = 0
+    c_save = 0
     value = 0
     bestValue = 0
     bestMov = []
@@ -39,19 +41,25 @@ def bestMove(gameState):
         for c in range(man.DIMENSIONS):
             if gameState.board[r][c] == "bl":
                 while(possibleMoves[i] != ";"):
-                    possibleMoves[i]
-                    possibleMoves[i+1]
-                    i= i+2
-                i = i+1
-                    #if()
-                        #value = x+y+z
+                    value =0
+                    row = possibleMoves[i]
+                    col = possibleMoves[i+1]
+                    if (col == 0):
+                        value = value+4
+                    if (col == 1):
+                        value = value + 3
 
 
-                if (value > bestValue):
-                    bestMov = []
-                    bestMov.append(r)
-                    bestMov.append(r)
-                    bestValue = value
+                    if (value >= bestValue):
+                        bestMov = []
+                        bestMov.append(possibleMoves[i])
+                        bestMov.append(possibleMoves[i+1])
+                        bestValue = value
+                        r_save = r
+                        c_save = c
 
-
-        print(bestMov)
+                    i = i + 2
+                i = i + 1
+    gameState.board[bestMov[0]][bestMov[1]] = "bl"
+    gameState.board[r_save][c_save] = "--"
+    print(bestMov)
