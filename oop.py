@@ -82,6 +82,10 @@ class Piece:
             if (main.validMove):
                 gameState.board[main.clicks[1][0]][main.clicks[1][1]] = gameState.board[main.clicks[0][0]][main.clicks[0][1]]
                 gameState.board[main.clicks[0][0]][main.clicks[0][1]] = "--"
+                # check for promotion
+                if ((main.clicks[1][0] == 0) and (gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "wh") or (main.clicks[1][0] == DIMENSIONS - 1) and (gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "bl")):  # promotion
+                    gameState.board[main.clicks[1][0]][main.clicks[1][1]] = str(gameState.board[main.clicks[1][0]][main.clicks[1][1]]) + "k"
+                # ------------------
                 main.validMove = False
                 main.whiteToMove = False if main.whiteToMove != False else True
             main.clicks = []
@@ -109,7 +113,7 @@ def main():
                 piece.getPosition()
                 piece.getValidMoves()
                 piece.move()
-
+                
         board.drawBoard()
         board.drawHighlight()
         board.drawPieces() 
