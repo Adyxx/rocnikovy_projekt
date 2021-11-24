@@ -48,35 +48,48 @@ class Piece:
     def getValidMoves(self):
         v=0
         if len(main.clicks) == 2:
-            orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
-            opPiece = "wh" if orientation != 1 else "bl"
-            if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):
-                if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
+            if(not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
+                orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
+                opPiece = "wh" if orientation != 1 else "bl"
+                if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):
+                    if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
 
-                    # Check if pawn can eat
-                    for r in range(DIMENSIONS):
-                        for c in range(DIMENSIONS):
-                            if (gameState.board[r][c] != opPiece and gameState.board[r][c] != "--"):
-                                if((c+2)<DIMENSIONS):
-                                    if(gameState.board[r-orientation][c+1] == opPiece and gameState.board[r-(orientation*2)][c+2] == "--"): # RIGHT
-                                        v+=1
-                                       
-                                if((c-2)>=0):
-                                    if(gameState.board[r-orientation][c-1] == opPiece and gameState.board[r-(orientation*2)][c-2] == "--"): # LEFT
-                                        v+=1
-                    if(v==0):
+                        # Check if pawn can eat
+                        for r in range(DIMENSIONS):
+                            for c in range(DIMENSIONS):
+                                if (not gameState.board[r][c].startswith(opPiece) and gameState.board[r][c] != "--"):
+                                    if((c+2)<DIMENSIONS):
+                                        if(gameState.board[r-orientation][c+1].startswith(opPiece) and gameState.board[r-(orientation*2)][c+2] == "--"): # RIGHT
+                                            v+=1
+                                        
+                                    if((c-2)>=0):
+                                        if(gameState.board[r-orientation][c-1].startswith(opPiece) and gameState.board[r-(orientation*2)][c-2] == "--"): # LEFT
+                                            v+=1
+                        if(v==0):
+                            main.validMove = True
+                        # --------------------
+                                                                
+                    if (main.clicks[0][0] == main.clicks[1][0]+(orientation*2)):
+                        if(main.clicks[0][1] == main.clicks[1][1]+2):
+                            if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1].startswith(opPiece)):
+                                gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] = "--"
+                                main.validMove = True
+                        if(main.clicks[0][1] == main.clicks[1][1]-2):
+                            if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1].startswith(opPiece)):
+                                gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] = "--"
+                                main.validMove = True
+            else:
+                print("king move")
+                for a in range(DIMENSIONS):
+                    if(main.clicks[0][0]-a == main.clicks[1][0] and main.clicks[0][1]+a == main.clicks[1][1]): # UP RIGHT
                         main.validMove = True
-                    # --------------------
-                                                            
-                if (main.clicks[0][0] == main.clicks[1][0]+(orientation*2)):
-                    if(main.clicks[0][1] == main.clicks[1][1]+2):
-                        if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] == opPiece):
-                            gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] = "--"
-                            main.validMove = True
-                    if(main.clicks[0][1] == main.clicks[1][1]-2):
-                        if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] == opPiece):
-                            gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] = "--"
-                            main.validMove = True
+                    elif(main.clicks[0][0]+a == main.clicks[1][0] and main.clicks[0][1]+a == main.clicks[1][1]): # DOWN RIGHT
+                        main.validMove = True
+                    elif(main.clicks[0][0]-a == main.clicks[1][0] and main.clicks[0][1]-a == main.clicks[1][1]): # UP LEFT
+                        main.validMove = True
+                    elif(main.clicks[0][0]+a == main.clicks[1][0] and main.clicks[0][1]-a == main.clicks[1][1]): # DOWN LEFT
+                        main.validMove = True
+                    
     def move(self):
         if len(main.clicks) == 2:
             if (main.validMove):
