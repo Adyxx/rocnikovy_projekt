@@ -3,9 +3,10 @@ import pygame as p
 import board
 import random
 import main as man
+import tensorflow as tf
 #import mysql.connector
 
-
+howManyTurns = 2
 
 def eidam(gameState):#main
 
@@ -24,6 +25,14 @@ def whatMove(gameState):
     '''
     return gameState
     #man.movePiece(gameState, piece, pos1, pos2, row, col)
+
+def intoTheFuture(gameState, howManyTurns, value):
+    game_copy = gameState
+    game_copy_new
+    while(howManyTurns >0):
+
+        howManyTurns = howManyTurns - 1
+
 
 def bValue(moves, gameState):
     i=0
