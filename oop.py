@@ -59,6 +59,7 @@ class Piece:
                             for c in range(DIMENSIONS):
                                 # possible moves
                                 if(not gameState.board[r][c].startswith(opPiece) and not gameState.board[r][c]== "--"):
+                                    main.possibleMoves.append(";")
                                     if ((c - 1) >= 0 and gameState.board[r-orientation][c-1]=="--"):
                                         main.possibleMoves.append( (r-orientation, c-1) )
                                     if ((c + 1) < DIMENSIONS and gameState.board[r-orientation][c+1]=="--"):
