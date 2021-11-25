@@ -48,9 +48,9 @@ class Piece:
     def getValidMoves(self):
         v=0
         if len(main.clicks) == 2:
+            orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
+            opPiece = "wh" if orientation != 1 else "bl"
             if(not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
-                orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
-                opPiece = "wh" if orientation != 1 else "bl"
                 if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):
                     if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
 
@@ -91,7 +91,7 @@ class Piece:
                 print("king move")
                 for a in range(DIMENSIONS):
                     if(main.clicks[0][0]-a == main.clicks[1][0] and main.clicks[0][1]+a == main.clicks[1][1]): # UP RIGHT
-                        main.validMove = True
+                        main.validMove = True if gameState.board(main.clicks[0][0]-a)[main.clicks[0][1]+a].startswith(opPiece) and gameState.board(main.clicks[0][0]-a-1)[main.clicks[0][1]+a+1] ==" --" else False
                     elif(main.clicks[0][0]+a == main.clicks[1][0] and main.clicks[0][1]+a == main.clicks[1][1]): # DOWN RIGHT
                         main.validMove = True
                     elif(main.clicks[0][0]-a == main.clicks[1][0] and main.clicks[0][1]-a == main.clicks[1][1]): # UP LEFT
