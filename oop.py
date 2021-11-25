@@ -57,6 +57,14 @@ class Piece:
                         # Check if pawn can eat
                         for r in range(DIMENSIONS):
                             for c in range(DIMENSIONS):
+                                # possible moves
+                                if(not gameState.board[r][c].startswith(opPiece) and not gameState.board[r][c]== "--"):
+                                    if ((c - 1) >= 0 and gameState.board[r-orientation][c-1]=="--"):
+                                        main.possibleMoves.append( (r-orientation, c-1) )
+                                    if ((c + 1) < DIMENSIONS and gameState.board[r-orientation][c+1]=="--"):
+                                        main.possibleMoves.append( (r-orientation, c+1) )
+                                # --------------
+
                                 if (not gameState.board[r][c].startswith(opPiece) and gameState.board[r][c] != "--"):
                                     if((c+2)<DIMENSIONS):
                                         if(gameState.board[r-orientation][c+1].startswith(opPiece) and gameState.board[r-(orientation*2)][c+2] == "--"): # RIGHT
@@ -114,6 +122,7 @@ def main():
     clock = p.time.Clock()
     main.whiteToMove = True
     main.validMove = False
+    main.possibleMoves = []
     main.clicks = []
     board = Board((200, 200, 200), (100, 100, 100), p.display.set_mode((WIDTH, HEIGHT)))
     piece = Piece()
@@ -126,7 +135,9 @@ def main():
                 piece.getPosition()
                 piece.getValidMoves()
                 piece.move()
-                
+                print(main.possibleMoves)
+                main.possibleMoves = []
+
         board.drawBoard()
         board.drawHighlight()
         board.drawPieces() 
