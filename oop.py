@@ -65,17 +65,17 @@ class Piece:
                             if((c-2)>=0):
                                 if(gameState.board[r-orientation][c-1].startswith(opPiece) and gameState.board[r-(orientation*2)][c-2] == "--"): # LEFT
                                     v+=1
-                    if(v==0 and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
-                        if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
-                            pawn = True
-                    elif(v==0 and gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
+                if(v==0 and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
+                    if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
                         pawn = True
+                elif(v==0 and gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
+                    pawn = True
                                                                 
                 if (main.clicks[0][0] == main.clicks[1][0]+(orientation*2)):
                     if(main.clicks[0][1] == main.clicks[1][1]+2):
                         if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1].startswith(opPiece)):
                             gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] = "--"
-                            pawn= True
+                            pawn = True
                     if(main.clicks[0][1] == main.clicks[1][1]-2):
                         if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1].startswith(opPiece)):
                             gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] = "--"
@@ -136,7 +136,7 @@ def main():
     p.init()
     loadImages()
     clock = p.time.Clock()
-    main.whiteToMove = True
+    main.whiteToMove = False
     main.validMove = False
     main.clicks = []
     board = Board((200, 200, 200), (100, 100, 100), p.display.set_mode((WIDTH, HEIGHT)))
