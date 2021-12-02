@@ -54,20 +54,21 @@ class Piece:
         if len(main.clicks) == 2:
             orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
             opPiece = "wh" if orientation != 1 else "bl"
-
-            if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):
-                if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
-                    for r in range(DIMENSIONS):
-                        for c in range(DIMENSIONS):
-                            if (not gameState.board[r][c].startswith(opPiece) and gameState.board[r][c] != "--" and not gameState.board[r][c].endswith("k") ):
-                                if((c+2)<DIMENSIONS):
-                                    if(gameState.board[r-orientation][c+1].startswith(opPiece) and gameState.board[r-(orientation*2)][c+2] == "--"): # RIGHT
-                                        v+=1
+            if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):           
+                for r in range(DIMENSIONS):
+                    for c in range(DIMENSIONS):
+                        if (not gameState.board[r][c].startswith(opPiece) and gameState.board[r][c] != "--" and not gameState.board[r][c].endswith("k") ):
+                            if((c+2)<DIMENSIONS):
+                                if(gameState.board[r-orientation][c+1].startswith(opPiece) and gameState.board[r-(orientation*2)][c+2] == "--"): # RIGHT
+                                    v+=1
                                         
-                                if((c-2)>=0):
-                                    if(gameState.board[r-orientation][c-1].startswith(opPiece) and gameState.board[r-(orientation*2)][c-2] == "--"): # LEFT
-                                        v+=1
-                    if(v==0):
+                            if((c-2)>=0):
+                                if(gameState.board[r-orientation][c-1].startswith(opPiece) and gameState.board[r-(orientation*2)][c-2] == "--"): # LEFT
+                                    v+=1
+                    if(v==0 and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
+                        if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
+                            pawn = True
+                    elif(v==0 and gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
                         pawn = True
                                                                 
                 if (main.clicks[0][0] == main.clicks[1][0]+(orientation*2)):
