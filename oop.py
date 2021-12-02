@@ -90,26 +90,39 @@ class Piece:
                                     if(((r + n + 1) < (DIMENSIONS)) and ((c + n + 1) < (DIMENSIONS))):                      
                                         if(gameState.board[r + n][c + n].startswith(opPiece) and gameState.board[r + n + 1][c + n + 1] == "--"):
                                             p+=1      
-                                                    
+                                            dist = n  
+
                                     if(((r - n - 1) >= 0) and ((c + n + 1) < (DIMENSIONS))):
                                         if(gameState.board[r - n][c + n].startswith(opPiece) and gameState.board[r - n - 1][c + n + 1] == "--"):
-                                            p+=1                                 
+                                            p+=1
+                                            dist = n                                
                                                                                     
                                     if(((r + n + 1) < (DIMENSIONS)) and (c - n - 1 >= 0) ):
                                         if(gameState.board[r + n][c - n].startswith(opPiece) and gameState.board[r + n + 1][c - n - 1] == "--"):
                                             p+=1
+                                            dist = n  
 
                                     if(((r - n - 1) >= 0) and ((c - n - 1) >= 0)):
                                         if(gameState.board[r - n][c - n].startswith(opPiece) and gameState.board[r - n - 1][c - n - 1] == "--"):
                                             p+=1
+                                            dist = n  
                                                             
                 if (p == 0):
                     for n in range(DIMENSIONS):
                         if ((main.clicks[0][0] == main.clicks[1][0] + n) or (main.clicks[0][0] == main.clicks[1][0] - n)) and ((main.clicks[0][1] == main.clicks[1][1] + n) or (main.clicks[0][1] == main.clicks[1][1] - n)):                                       
                             king = True
-                elif ():
-                    pass
-                    # king must eat
+                else:
+                    if (main.clicks[1][0] < (main.clicks[0][0] - dist) and main.clicks[1][1] > (main.clicks[0][1] + dist)):
+                        king = True
+
+                    if (main.clicks[1][0] < (main.clicks[0][0] - dist) and main.clicks[1][1] < (main.clicks[0][1] - dist)):
+                        king = True
+
+                    if (main.clicks[1][0] > (main.clicks[0][0] + dist) and main.clicks[1][1] > (main.clicks[0][1] + dist)):
+                        king = True
+                    
+                    if (main.clicks[1][0] > (main.clicks[0][0] + dist) and main.clicks[1][1] < (main.clicks[0][1] - dist)):
+                        king = True
 
                 king = True if (eK == 0 or king == True) else False
                 main.validMove = True if (king == True and pawn == True) else False
@@ -136,7 +149,7 @@ def main():
     p.init()
     loadImages()
     clock = p.time.Clock()
-    main.whiteToMove = False
+    main.whiteToMove = True
     main.validMove = False
     main.clicks = []
     board = Board((200, 200, 200), (100, 100, 100), p.display.set_mode((WIDTH, HEIGHT)))
