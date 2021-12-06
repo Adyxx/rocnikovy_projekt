@@ -3,7 +3,7 @@ import pygame as p
 import board
 import random
 import main as man
-import tensorflow as tf
+#import tensorflow as tf
 #import mysql.connector
 
 howManyTurns = 2
@@ -28,7 +28,7 @@ def whatMove(gameState):
 
 def intoTheFuture(gameState, howManyTurns, value):
     game_copy = gameState
-    game_copy_new
+
     while(howManyTurns >0):
 
         howManyTurns = howManyTurns - 1
@@ -38,6 +38,24 @@ def bValue(moves, gameState):
     i=0
     value = 0
     bestValue =0
+    bestMov = []
+
+    #testing values
+    #make values random, change 1 value at a time, change it for x amount of time, save values somewhere
+    #Not sure if it counts as AI but it should do what I want it to
+
+    #boardValue = numFriendly - numEnemy
+    makeKing = 10
+    takePiece = 1
+    loosePiece = -1
+    pieceOnSide = 0,75
+
+
+    #if boardValue <0 -> randomly change all values
+    #if boardValue >0 -> slightly change 1 value, if better, keep value
+
+
+
     for r in range(man.DIMENSIONS):
         for c in range(man.DIMENSIONS):
             if gameState.board[r][c] == "bl":

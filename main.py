@@ -216,7 +216,7 @@ def hungaryPawns(gameState, pos1, pos2, row, col):
                                     return True
                                 else:
                                     return False
-                            elif ((gameState.board[r + direction1][c - 1] != "--" and
+                            elif ((gameState.board[r + direction1][c - 1] != "--" and (c-1 !=0) and
                                    gameState.board[r + (direction1 * 2)][c - 2] == "--") and not
                                   gameState.board[r + direction1][c - 1].startswith(piece) and (
                                           main.move == 1 and piece.startswith("wh") or (
@@ -454,16 +454,36 @@ def drawGameState(screen, gameState, selectedSquare):
 
 def allPossibleMoves(gameState):
     possibleMoves = []
+    possibleMovesCopy = []
+    howManyCanEat = 0
     for r in range(DIMENSIONS):
         for c in range(DIMENSIONS):
             if gameState.board[r][c] == "bl":
-                if ((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--")):
-                    possibleMoves.append(r + 1)
-                    possibleMoves.append(c + 1)
 
-                if ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0)):
-                    possibleMoves.append(r + 1)
-                    possibleMoves.append(c - 1)
+                if ( ((c-1>=0) and (c+1 <DIMENSIONS))and((gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk") or (gameState.board[r + 1][c - 1] == "wh") or (gameState.board[r + 1][c - 1] == "whk")) ):#must he eat?
+                    if (howManyCanEat ==0):
+                        q=0
+                        possibleMovesCopy = possibleMoves
+                        try:
+                            while(1):
+                                if (possibleMoves[q] != ";"):
+                                    del possibleMovesCopy[q]
+                                    del possibleMovesCopy[q]
+                                q=1+q
+
+                        except:
+                            print("deleted")
+
+                    howManyCanEat = howManyCanEat+1
+
+                if (howManyCanEat ==0):
+                    if ((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--")):
+                        possibleMoves.append(r + 1)
+                        possibleMoves.append(c + 1)
+
+                    if ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0)):
+                        possibleMoves.append(r + 1)
+                        possibleMoves.append(c - 1)
 
                 possibleMoves.append(";")
     print(possibleMoves)
