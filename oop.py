@@ -59,8 +59,7 @@ class Piece:
                         if (not gameState.board[r][c].startswith(opPiece) and gameState.board[r][c] != "--" and not gameState.board[r][c].endswith("k") ):
                             if((c+2)<DIMENSIONS):
                                 if(gameState.board[r-orientation][c+1].startswith(opPiece) and gameState.board[r-(orientation*2)][c+2] == "--"): # RIGHT
-                                    v+=1
-                                        
+                                    v+=1                                
                             if((c-2)>=0):
                                 if(gameState.board[r-orientation][c-1].startswith(opPiece) and gameState.board[r-(orientation*2)][c-2] == "--"): # LEFT
                                     v+=1
@@ -74,11 +73,12 @@ class Piece:
                     if(main.clicks[0][1] == main.clicks[1][1]+2):
                         if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1].startswith(opPiece)):
                             gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] = "--"
-                            pawn = True
+                            main.validMove = True
+
                     if(main.clicks[0][1] == main.clicks[1][1]-2):
                         if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1].startswith(opPiece)):
                             gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] = "--"
-                            pawn = True
+                            main.validMove = True
                 
                 for r in range(DIMENSIONS):
                     for c in range(DIMENSIONS):
@@ -93,9 +93,9 @@ class Piece:
                                             p+=1      
                                             dist1 = n  
                                     if(((r - n - 1) >= 0) and ((c + n + 1) < (DIMENSIONS))):
+                                        print(((not gameState.board[r - n][c + n].startswith(opPiece) and not gameState.board[r - n][c + n] == "--") or (not gameState.board[r - n][c + n] == "--" and not gameState.board[r - n - 1][c + n + 1] == "--")), ((not gameState.board[r - n][c + n].startswith(opPiece) and not gameState.board[r - n][c + n] == "--"), (not gameState.board[r - n][c + n] == "--" and not gameState.board[r - n - 1][c + n + 1] == "--")))
                                         if(p == 0 and ((not gameState.board[r - n][c + n].startswith(opPiece) and not gameState.board[r - n][c + n] == "--") or (not gameState.board[r - n][c + n] == "--" and not gameState.board[r - n - 1][c + n + 1] == "--"))):
                                             block2 = True
-                                            print(p)
                                         elif(block2 == False and gameState.board[r - n][c + n].startswith(opPiece) and gameState.board[r - n - 1][c + n + 1] == "--"):
                                             p+=1
                                             dist2 = n                                                                                                               
@@ -108,29 +108,30 @@ class Piece:
                                     if(((r - n - 1) >= 0) and ((c - n - 1) >= 0)):
                                         if(p == 0 and ((not gameState.board[r - n][c - n].startswith(opPiece) and not gameState.board[r - n][c - n] == "--") or (not gameState.board[r - n][c - n] == "--" and not gameState.board[r - n + 1][c - n - 1] == "--"))):
                                             block4 = True
-                                        if(block4 == True and gameState.board[r - n][c - n].startswith(opPiece) and gameState.board[r - n - 1][c - n - 1] == "--"):
+                                        elif(block4 == True and gameState.board[r - n][c - n].startswith(opPiece) and gameState.board[r - n - 1][c - n - 1] == "--"):
                                             p+=1
                                             dist4 = n                                                              
                 if (p == 0):
+                    # WIP
                     for n in range(DIMENSIONS):
                         if ((main.clicks[0][0] == main.clicks[1][0] + n) or (main.clicks[0][0] == main.clicks[1][0] - n)) and ((main.clicks[0][1] == main.clicks[1][1] + n) or (main.clicks[0][1] == main.clicks[1][1] - n)):                                       
                             king = True
                 else:
                     if (block4 == False and dist4 > 0 and main.clicks[1][0] < (main.clicks[0][0] - dist4) and main.clicks[1][1] < (main.clicks[0][1] - dist4)):
-                        gameState.board[main.clicks[0][0] - dist4][main.clicks[0][1] - dist4] = "--"
-                        king = True
+                        gameState.board[main.clicks[0][0] - dist4][main.clicks[0][1] - dist4] = "--" # WIP
+                        main.validMove = True
                     if (block2 == False and dist2 > 0 and main.clicks[1][0] < (main.clicks[0][0] - dist2) and main.clicks[1][1] > (main.clicks[0][1] + dist2)):
-                        gameState.board[main.clicks[0][0] - dist2][main.clicks[0][1] + dist2] = "--"
-                        king = True
+                        gameState.board[main.clicks[0][0] - dist2][main.clicks[0][1] + dist2] = "--" # WIP
+                        main.validMove = True
                     if (block1 == False and dist1 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist1) and main.clicks[1][1] > (main.clicks[0][1] + dist1)):
-                        gameState.board[main.clicks[0][0] + dist1][main.clicks[0][1] + dist1] == "--"
-                        king = True              
+                        gameState.board[main.clicks[0][0] + dist1][main.clicks[0][1] + dist1] == "--" # WIP
+                        main.validMove = True            
                     if (block3 == False and dist3 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist3) and main.clicks[1][1] < (main.clicks[0][1] - dist3)):
-                        gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] == "--"
-                        king = True
+                        gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] == "--" # WIP
+                        main.validMove = True
 
                 king = True if (eK == 0 or king == True) else False
-                main.validMove = True if (king == True and pawn == True) else False
+                main.validMove = True if ( (king == True and pawn == True) or main.validMove == True) else False
 
     def move(self):
         if len(main.clicks) == 2:
