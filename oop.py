@@ -124,10 +124,10 @@ class Piece:
                         gameState.board[main.clicks[0][0] - dist2][main.clicks[0][1] + dist2] = "--" # WIP
                         main.validMove = True
                     if (block1 == False and dist1 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist1) and main.clicks[1][1] > (main.clicks[0][1] + dist1)):
-                        gameState.board[main.clicks[0][0] + dist1][main.clicks[0][1] + dist1] == "--" # WIP
+                        gameState.board[main.clicks[0][0] + dist1][main.clicks[0][1] + dist1] = "--" # WIP
                         main.validMove = True            
                     if (block3 == False and dist3 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist3) and main.clicks[1][1] < (main.clicks[0][1] - dist3)):
-                        gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] == "--" # WIP
+                        gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] = "--" # WIP
                         main.validMove = True
 
                 king = True if (eK == 0 or king == True) else False
