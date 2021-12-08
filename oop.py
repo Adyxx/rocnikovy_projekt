@@ -112,9 +112,14 @@ class Piece:
                                             p+=1
                                             dist4 = n                                                              
                 if (p == 0):
-                    print("FUNGUJE TO, ale chybí ti kód LOL")
                     for n in range(DIMENSIONS):
-                        if ((main.clicks[0][0] == main.clicks[1][0] + n) or (main.clicks[0][0] == main.clicks[1][0] - n)) and ((main.clicks[0][1] == main.clicks[1][1] + n) or (main.clicks[0][1] == main.clicks[1][1] - n)):                                       
+                        if ( (main.clicks[1][0] == main.clicks[0][0] - n) and (main.clicks[1][1] == main.clicks[0][1] - n) and (((main.clicks[1][0] > (main.clicks[0][0] - oo4) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo4) )) or oo4 == 0)):
+                            king = True
+                        if ( (main.clicks[1][0] == main.clicks[0][0] - n) and (main.clicks[1][1] == main.clicks[0][1] + n) and (((main.clicks[1][0] > (main.clicks[0][0] - oo2) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo2) )) or oo2 == 0)):
+                            king = True
+                        if ( (main.clicks[1][0] == main.clicks[0][0] + n) and (main.clicks[1][1] == main.clicks[0][1] + n) and (((main.clicks[1][0] < (main.clicks[0][0] + oo1) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo1) )) or oo1 == 0)):
+                            king = True            
+                        if ( (main.clicks[1][0] == main.clicks[0][0] + n) and (main.clicks[1][1] == main.clicks[0][1] - n) and (((main.clicks[1][0] < (main.clicks[0][0] + oo3) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo3) )) or oo3 == 0)):
                             king = True
                 else:
                     if (dist4 > 0 and main.clicks[1][0] < (main.clicks[0][0] - dist4) and main.clicks[1][1] < (main.clicks[0][1] - dist4) and (((main.clicks[1][0] > (main.clicks[0][0] - oo4) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo4) )) or oo4 == 0)):
@@ -130,7 +135,7 @@ class Piece:
                         gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] = "--"
                         main.validMove = True
 
-                king = True if (eK == 0 or king == True) else False
+                king = True if (eK == 0 or king == True or (p==0 and pawn == True)) else False
                 main.validMove = True if ( (king == True and pawn == True) or main.validMove == True) else False
 
     def extraMove(self):
