@@ -50,7 +50,7 @@ class Piece:
         pawn, king = False, False
         if len(main.clicks) == 2:
             dist1, dist2, dist3, dist4 = 0, 0, 0, 0
-            block1, block2, block3, block4 = False, False, False, False
+            oo1, oo2, oo3, oo4 = 0, 0, 0, 0
             orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
             opPiece = "wh" if orientation != 1 else "bl"
             if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):           
@@ -88,51 +88,54 @@ class Piece:
                             for n in range(DIMENSIONS): 
                                 if(n>0):                      
                                     if(((r + n + 1) < (DIMENSIONS)) and ((c + n + 1) < (DIMENSIONS))):
-                                        if(p == 0 and ((not gameState.board[r + n][c + n].startswith(opPiece) and not gameState.board[r + n][c + n] == "--") or (not gameState.board[r + n][c + n] == "--" and not gameState.board[r + n + 1][c + n + 1] == "--"))):
-                                            block1 = True
-                                        elif(block1 == False and gameState.board[r + n][c + n].startswith(opPiece) and gameState.board[r + n + 1][c + n + 1] == "--"):
+                                        if(oo1 == 0 and ((not gameState.board[r + n][c + n].startswith(opPiece) and not gameState.board[r + n][c + n] == "--") or (not gameState.board[r + n][c + n] == "--" and not gameState.board[r + n + 1][c + n + 1] == "--"))):
+                                            oo1 = n
+                                        elif(oo1 == 0 and gameState.board[r + n][c + n].startswith(opPiece) and gameState.board[r + n + 1][c + n + 1] == "--"):
                                             p+=1      
                                             dist1 = n  
                                     if(((r - n - 1) >= 0) and ((c + n + 1) < (DIMENSIONS))):
-                                        print(((not gameState.board[r - n][c + n].startswith(opPiece) and not gameState.board[r - n][c + n] == "--") or (not gameState.board[r - n][c + n] == "--" and not gameState.board[r - n - 1][c + n + 1] == "--")), ((not gameState.board[r - n][c + n].startswith(opPiece) and not gameState.board[r - n][c + n] == "--"), (not gameState.board[r - n][c + n] == "--" and not gameState.board[r - n - 1][c + n + 1] == "--")))
-                                        if(p == 0 and ((not gameState.board[r - n][c + n].startswith(opPiece) and not gameState.board[r - n][c + n] == "--") or (not gameState.board[r - n][c + n] == "--" and not gameState.board[r - n - 1][c + n + 1] == "--"))):
-                                            block2 = True
-                                        elif(block2 == False and gameState.board[r - n][c + n].startswith(opPiece) and gameState.board[r - n - 1][c + n + 1] == "--"):
+                                        if(oo2 == 0 and ((not gameState.board[r - n][c + n].startswith(opPiece) and not gameState.board[r - n][c + n] == "--") or (not gameState.board[r - n][c + n] == "--" and not gameState.board[r - n - 1][c + n + 1] == "--"))):
+                                            oo2 = n
+                                        elif(oo2 == 0 and gameState.board[r - n][c + n].startswith(opPiece) and gameState.board[r - n - 1][c + n + 1] == "--"):
                                             p+=1
-                                            dist2 = n                                                                                                               
+                                            dist2 = n                                                                                                                                                    
                                     if(((r + n + 1) < (DIMENSIONS)) and (c - n - 1 >= 0) ):
-                                        if(p == 0 and ((not gameState.board[r + n][c - n].startswith(opPiece) and not gameState.board[r + n][c - n] == "--") or (not gameState.board[r + n][c - n] == "--" and not gameState.board[r + n + 1][c - n - 1] == "--"))):
-                                            block3 = True                           
-                                        elif(block3 == False and gameState.board[r + n][c - n].startswith(opPiece) and gameState.board[r + n + 1][c - n - 1] == "--"):
+                                        if(oo3 == 0 and ((not gameState.board[r + n][c - n].startswith(opPiece) and not gameState.board[r + n][c - n] == "--") or (not gameState.board[r + n][c - n] == "--" and not gameState.board[r + n + 1][c - n - 1] == "--"))):
+                                            oo3 = n                         
+                                        elif(oo3 == 0 and gameState.board[r + n][c - n].startswith(opPiece) and gameState.board[r + n + 1][c - n - 1] == "--"):
                                             p+=1
                                             dist3 = n  
                                     if(((r - n - 1) >= 0) and ((c - n - 1) >= 0)):
-                                        if(p == 0 and ((not gameState.board[r - n][c - n].startswith(opPiece) and not gameState.board[r - n][c - n] == "--") or (not gameState.board[r - n][c - n] == "--" and not gameState.board[r - n - 1][c - n - 1] == "--"))):
-                                            block4 = True
-                                        elif(block4 == False and gameState.board[r - n][c - n].startswith(opPiece) and gameState.board[r - n - 1][c - n - 1] == "--"):
+                                        if(oo4 == 0 and ((not gameState.board[r - n][c - n].startswith(opPiece) and not gameState.board[r - n][c - n] == "--") or (not gameState.board[r - n][c - n] == "--" and not gameState.board[r - n - 1][c - n - 1] == "--"))):
+                                            oo4 = n
+                                        elif(oo4 == 0 and gameState.board[r - n][c - n].startswith(opPiece) and gameState.board[r - n - 1][c - n - 1] == "--"):
                                             p+=1
                                             dist4 = n                                                              
                 if (p == 0):
+                    print("FUNGUJE TO, ale chybí ti kód LOL")
                     for n in range(DIMENSIONS):
                         if ((main.clicks[0][0] == main.clicks[1][0] + n) or (main.clicks[0][0] == main.clicks[1][0] - n)) and ((main.clicks[0][1] == main.clicks[1][1] + n) or (main.clicks[0][1] == main.clicks[1][1] - n)):                                       
                             king = True
                 else:
-                    if (block4 == False and dist4 > 0 and main.clicks[1][0] < (main.clicks[0][0] - dist4) and main.clicks[1][1] < (main.clicks[0][1] - dist4)):
+                    if (dist4 > 0 and main.clicks[1][0] < (main.clicks[0][0] - dist4) and main.clicks[1][1] < (main.clicks[0][1] - dist4) and (((main.clicks[1][0] > (main.clicks[0][0] - oo4) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo4) )) or oo4 == 0)):
                         gameState.board[main.clicks[0][0] - dist4][main.clicks[0][1] - dist4] = "--"
                         main.validMove = True
-                    if (block2 == False and dist2 > 0 and main.clicks[1][0] < (main.clicks[0][0] - dist2) and main.clicks[1][1] > (main.clicks[0][1] + dist2)):
+                    if (dist2 > 0 and (main.clicks[1][0] < main.clicks[0][0] - dist2) and (main.clicks[1][1] > main.clicks[0][1] + dist2) and (((main.clicks[1][0] > (main.clicks[0][0] - oo2) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo2) )) or oo2 == 0)):
                         gameState.board[main.clicks[0][0] - dist2][main.clicks[0][1] + dist2] = "--"
                         main.validMove = True
-                    if (block1 == False and dist1 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist1) and main.clicks[1][1] > (main.clicks[0][1] + dist1)):
+                    if (dist1 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist1) and main.clicks[1][1] > (main.clicks[0][1] + dist1) and (((main.clicks[1][0] < (main.clicks[0][0] + oo1) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo1) )) or oo1 == 0)):
                         gameState.board[main.clicks[0][0] + dist1][main.clicks[0][1] + dist1] = "--"
                         main.validMove = True            
-                    if (block3 == False and dist3 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist3) and main.clicks[1][1] < (main.clicks[0][1] - dist3)):
+                    if (dist3 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist3) and main.clicks[1][1] < (main.clicks[0][1] - dist3) and (((main.clicks[1][0] < (main.clicks[0][0] + oo3) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo3) )) or oo3 == 0)):
                         gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] = "--"
                         main.validMove = True
 
                 king = True if (eK == 0 or king == True) else False
                 main.validMove = True if ( (king == True and pawn == True) or main.validMove == True) else False
 
+    def extraMove(self):
+        pass
+    
     def move(self):
         if len(main.clicks) == 2:
             if (main.validMove):
