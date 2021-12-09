@@ -75,11 +75,13 @@ class Piece:
                         if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1].startswith(opPiece)):
                             gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] = "--"
                             main.validMove = True
+                            Piece().extraMove(orientation, opPiece)
 
                     if(main.clicks[0][1] == main.clicks[1][1]-2):
                         if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1].startswith(opPiece)):
                             gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] = "--"
                             main.validMove = True
+                            Piece().extraMove(orientation, opPiece)
                 
                 for r in range(DIMENSIONS):
                     for c in range(DIMENSIONS):
@@ -138,9 +140,24 @@ class Piece:
                 king = True if (eK == 0 or king == True or (p==0 and pawn == True and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k"))) else False
                 main.validMove = True if ( (king == True and pawn == True) or main.validMove == True) else False
 
-    def extraMove(self):
-        pass
-    
+    def extraMove(self, orientation, opPiece):
+        if((main.clicks[1][1] - 2 )>=0 and (main.clicks[1][1] + 2)<DIMENSIONS):
+            if((gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--") and (gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--")):             
+                main.whiteToMove = False if main.whiteToMove != False else True
+                main.exPiece.append(main.clicks[1]) # not implemented yet
+                print("BOTH")
+                # WIP ...
+        elif((main.clicks[1][1] + 2)<DIMENSIONS):
+            if(gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--"): # RIGHT
+                print("RIGHT")
+                # WIP ...
+        elif((main.clicks[1][1] - 2 )>=0):
+            if(gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--"): # LEFT
+                print("LEFT")
+                # WIP ...
+        else:          
+            print("NONE")
+            
     def move(self):
         if len(main.clicks) == 2:
             if (main.validMove):
@@ -165,6 +182,7 @@ def main():
     clock = p.time.Clock()
     main.whiteToMove = True
     main.validMove = False
+    main.exPiece = []
     main.clicks = []
     board = Board((200, 200, 200), (100, 100, 100), p.display.set_mode((WIDTH, HEIGHT)))
     piece = Piece()
