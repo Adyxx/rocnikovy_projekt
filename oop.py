@@ -141,21 +141,25 @@ class Piece:
                 main.validMove = True if ( (king == True and pawn == True) or main.validMove == True) else False
 
     def extraMove(self, orientation, opPiece):
+        y = 0
         if((main.clicks[1][1] - 2 )>=0 and (main.clicks[1][1] + 2)<DIMENSIONS):
             if((gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--") and (gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--")):             
                 main.whiteToMove = False if main.whiteToMove != False else True
                 main.exPiece.append(main.clicks[1]) # not implemented yet
                 print("BOTH")
+                y = 1
                 # WIP ...
-        elif((main.clicks[1][1] + 2)<DIMENSIONS):
+        if(y == 0 and (main.clicks[1][1] + 2)<DIMENSIONS):
             if(gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--"): # RIGHT
                 print("RIGHT")
+                y = 1
                 # WIP ...
-        elif((main.clicks[1][1] - 2 )>=0):
+        if(y == 0 and (main.clicks[1][1] - 2 )>=0):
             if(gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--"): # LEFT
                 print("LEFT")
+                y = 1
                 # WIP ...
-        else:          
+        if (y == 0):
             print("NONE")
             
     def move(self):
