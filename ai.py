@@ -3,6 +3,8 @@ import pygame as p
 import board
 import random
 import oop as man
+import copy
+
 #import tensorflow as tf
 #import mysql.connector
 
@@ -11,20 +13,7 @@ howManyTurns = 2
 def eidam(gameState):#main
 
     bestMove(gameState)
-    whatMove(gameState)
-    return gameState
 
-def whatMove(gameState):
-    '''
-    pos1=random.randint(0, man.DIMENSIONS-1)
-    pos2=random.randint(0, man.DIMENSIONS-1)
-    row=1+pos1
-    col=1+pos2
-    piece="bl"
-    gameState.board[pos1][pos2] = piece
-    '''
-    return gameState
-    #man.movePiece(gameState, piece, pos1, pos2, row, col)
 
 def intoTheFuture(gameState, howManyTurns, value):
     game_copy = gameState
@@ -34,15 +23,16 @@ def intoTheFuture(gameState, howManyTurns, value):
         howManyTurns = howManyTurns - 1
 
 
-def bValue(moves, gameState):
+def bValue(possibleMoves, gameState):
     i=0
     bestValue =0
     boardValue =0
     bestBoardValue =0
-    bestMov = []
-    gameCopy = gameState
+    bMove = []
+    gameCopy = copy.deepcopy(gameState.board)
     whatPawn=0
     pawn =0
+    numStred=0
     #testing values
     #make values random, change 1 value at a time, change it for x amount of time, save values somewhere
     #Not sure if it counts as AI but it should do what I want it to
@@ -53,31 +43,46 @@ def bValue(moves, gameState):
 
     #if boardValue <0 -> randomly change all values
     #if boardValue >0 -> slightly change 1 value, if better, keep value
-
-    while (len(possibleMoves)):
+    for x in possibleMoves:
+        numStred += 1
+    while (i<numStred):
+        if (possibleMoves[i] == ";"):
+            pawn +=1
         for r in range(man.DIMENSIONS):
             for c in range(man.DIMENSIONS):
-                if gameCopy.board[r][c] == "blk":
+                if gameCopy[r][c] == "blk":
                     boardValue+=king
-                if gameCopy.board[r][c] == "whk":
+                elif gameCopy[r][c] == "whk":
                     boardValue -= king
-                if gameCopy.board[r][c] == "bl":
+                elif gameCopy[r][c] == "bl":
                     boardValue +=1
 
-                if gameCopy.board[r][c] == "wh":
+                elif gameCopy[r][c] == "wh":
                     boardValue -=1
-                if (bestBoardValue < boardValue):
-                    bestBoardValue = boardValue
-                    whatPawn = pawn
 
-        gameCopy = gameState
-        gameCopy.board[possibleMoves[0+pawn]][possibleMoves[1+pawn]] = "bl"
-        gameCopy.board[possibleMoves[2+pawn]][possibleMoves[3+pawn]] = "--"
-        pawn +=1
 
-    #database(r,c)
+        if (possibleMoves[i] == ";"):
+            pawn = i+1
+        i+=1
+
+        gameCopy = copy.deepcopy(gameState.board)
+
+        if (bestBoardValue <= boardValue):
+            bestBoardValue = boardValue
+            bMove = []
+            bMove.append(possibleMoves[pawn])
+            bMove.append(possibleMoves[pawn+1])
+
+        gameCopy[possibleMoves[pawn][0]][possibleMoves[pawn][1]] = "--"
+        gameCopy[possibleMoves[pawn+1][0]][possibleMoves[pawn+1][1]] = "bl"
+
+    if (bMove == []):
+        bestBoardValue = boardValue
+        bMove.append(possibleMoves[pawn])
+        bMove.append(possibleMoves[pawn + 1])
+
     print("Current value:")
-    return bestMov
+    return bMove
 '''
 def database(r,c):
     mydb = mysql.connector.connect(
@@ -103,7 +108,7 @@ def bestMove(gameState):
     bestMov = []
     possibleMoves = man.allPossibleMoves(gameState)
     bestMov = bValue(possibleMoves, gameState)
+    gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
+    gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
 
-    gameState.board[bestMov[0]][bestMov[1]] = "bl"
-    gameState.board[bestMov[2]][bestMov[3]] = "--"
     print(bestMov)
