@@ -1,4 +1,6 @@
 import pygame as p
+
+import ai
 import board
 
 WIDTH = 512
@@ -46,27 +48,132 @@ class Piece:
         main.clicks.append((p.mouse.get_pos()[1] // squareSize, p.mouse.get_pos()[0] // squareSize))
 
     def getValidMoves(self):
+        v, p, eK = 0, 0, 0
+        pawn, king = False, False
         if len(main.clicks) == 2:
+            dist1, dist2, dist3, dist4 = 0, 0, 0, 0
+            oo1, oo2, oo3, oo4 = 0, 0, 0, 0
             orientation = -1 if gameState.board[main.clicks[0][0]][main.clicks[0][1]].startswith("b") else 1
-            opPiece = "wh" if orientation == -1 else "bl"
-            if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):
-                if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
-                    main.validMove = True
-               
+            opPiece = "wh" if orientation != 1 else "bl"
+            if(gameState.board[main.clicks[0][0]][main.clicks[0][1]] != "--" and gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "--" and (orientation == 1 and main.whiteToMove == True or orientation == -1 and main.whiteToMove == False)):           
+                for r in range(DIMENSIONS):
+                    for c in range(DIMENSIONS):
+                        if (not gameState.board[r][c].startswith(opPiece) and gameState.board[r][c] != "--" and not gameState.board[r][c].endswith("k") ):
+                            if((c+2)<DIMENSIONS):
+                                if(gameState.board[r-orientation][c+1].startswith(opPiece) and gameState.board[r-(orientation*2)][c+2] == "--"): # RIGHT
+                                    v+=1
+                                        
+                            if((c-2)>=0):
+                                if(gameState.board[r-orientation][c-1].startswith(opPiece) and gameState.board[r-(orientation*2)][c-2] == "--"): # LEFT
+                                    v+=1
+                if(v==0 and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
+                    if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
+                        pawn = True
+                elif(v==0 and gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
+                    pawn = True
+                                                                
                 if (main.clicks[0][0] == main.clicks[1][0]+(orientation*2)):
                     if(main.clicks[0][1] == main.clicks[1][1]+2):
-                        if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] == opPiece):
+                        if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1].startswith(opPiece)):
                             gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]-1] = "--"
                             main.validMove = True
+                            Piece().extraMove(orientation, opPiece)
+
                     if(main.clicks[0][1] == main.clicks[1][1]-2):
-                        if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] == opPiece):
+                        if(gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1].startswith(opPiece)):
                             gameState.board[main.clicks[0][0]-orientation][main.clicks[0][1]+1] = "--"
                             main.validMove = True
+                            Piece().extraMove(orientation, opPiece)
+                
+                for r in range(DIMENSIONS):
+                    for c in range(DIMENSIONS):
+                        if (not gameState.board[r][c].startswith(opPiece) and gameState.board[r][c] != "--" and gameState.board[r][c].endswith("k") ):
+                            eK+=1
+                            for n in range(DIMENSIONS): 
+                                if(n>0):                      
+                                    if(((r + n + 1) < (DIMENSIONS)) and ((c + n + 1) < (DIMENSIONS))):
+                                        if(oo1 == 0 and ((not gameState.board[r + n][c + n].startswith(opPiece) and not gameState.board[r + n][c + n] == "--") or (not gameState.board[r + n][c + n] == "--" and not gameState.board[r + n + 1][c + n + 1] == "--"))):
+                                            oo1 = n
+                                        elif(oo1 == 0 and gameState.board[r + n][c + n].startswith(opPiece) and gameState.board[r + n + 1][c + n + 1] == "--"):
+                                            p+=1      
+                                            dist1 = n  
+                                    if(((r - n - 1) >= 0) and ((c + n + 1) < (DIMENSIONS))):
+                                        if(oo2 == 0 and ((not gameState.board[r - n][c + n].startswith(opPiece) and not gameState.board[r - n][c + n] == "--") or (not gameState.board[r - n][c + n] == "--" and not gameState.board[r - n - 1][c + n + 1] == "--"))):
+                                            oo2 = n
+                                        elif(oo2 == 0 and gameState.board[r - n][c + n].startswith(opPiece) and gameState.board[r - n - 1][c + n + 1] == "--"):
+                                            p+=1
+                                            dist2 = n                                                                                                                                                    
+                                    if(((r + n + 1) < (DIMENSIONS)) and (c - n - 1 >= 0) ):
+                                        if(oo3 == 0 and ((not gameState.board[r + n][c - n].startswith(opPiece) and not gameState.board[r + n][c - n] == "--") or (not gameState.board[r + n][c - n] == "--" and not gameState.board[r + n + 1][c - n - 1] == "--"))):
+                                            oo3 = n                         
+                                        elif(oo3 == 0 and gameState.board[r + n][c - n].startswith(opPiece) and gameState.board[r + n + 1][c - n - 1] == "--"):
+                                            p+=1
+                                            dist3 = n  
+                                    if(((r - n - 1) >= 0) and ((c - n - 1) >= 0)):
+                                        if(oo4 == 0 and ((not gameState.board[r - n][c - n].startswith(opPiece) and not gameState.board[r - n][c - n] == "--") or (not gameState.board[r - n][c - n] == "--" and not gameState.board[r - n - 1][c - n - 1] == "--"))):
+                                            oo4 = n
+                                        elif(oo4 == 0 and gameState.board[r - n][c - n].startswith(opPiece) and gameState.board[r - n - 1][c - n - 1] == "--"):
+                                            p+=1
+                                            dist4 = n                                                              
+                if (p == 0):
+                    for n in range(DIMENSIONS):
+                        if ( (main.clicks[1][0] == main.clicks[0][0] - n) and (main.clicks[1][1] == main.clicks[0][1] - n) and (((main.clicks[1][0] > (main.clicks[0][0] - oo4) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo4) )) or oo4 == 0)):
+                            king = True
+                        if ( (main.clicks[1][0] == main.clicks[0][0] - n) and (main.clicks[1][1] == main.clicks[0][1] + n) and (((main.clicks[1][0] > (main.clicks[0][0] - oo2) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo2) )) or oo2 == 0)):
+                            king = True
+                        if ( (main.clicks[1][0] == main.clicks[0][0] + n) and (main.clicks[1][1] == main.clicks[0][1] + n) and (((main.clicks[1][0] < (main.clicks[0][0] + oo1) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo1) )) or oo1 == 0)):
+                            king = True
+                        if ( (main.clicks[1][0] == main.clicks[0][0] + n) and (main.clicks[1][1] == main.clicks[0][1] - n) and (((main.clicks[1][0] < (main.clicks[0][0] + oo3) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo3) )) or oo3 == 0)):
+                            king = True
+                else:
+                    for n in range(DIMENSIONS):
+                        if ((main.clicks[1][0] == main.clicks[0][0] - n) and (main.clicks[1][1] == main.clicks[0][1] - n) and dist4 > 0 and main.clicks[1][0] < (main.clicks[0][0] - dist4) and main.clicks[1][1] < (main.clicks[0][1] - dist4) and (((main.clicks[1][0] > (main.clicks[0][0] - oo4) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo4) )) or oo4 == 0)):
+                            gameState.board[main.clicks[0][0] - dist4][main.clicks[0][1] - dist4] = "--"
+                            main.validMove = True
+                        if ((main.clicks[1][0] == main.clicks[0][0] - n) and (main.clicks[1][1] == main.clicks[0][1] + n) and dist2 > 0 and (main.clicks[1][0] < main.clicks[0][0] - dist2) and (main.clicks[1][1] > main.clicks[0][1] + dist2) and (((main.clicks[1][0] > (main.clicks[0][0] - oo2) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo2) )) or oo2 == 0)):
+                            gameState.board[main.clicks[0][0] - dist2][main.clicks[0][1] + dist2] = "--"
+                            main.validMove = True
+                        if ((main.clicks[1][0] == main.clicks[0][0] + n) and (main.clicks[1][1] == main.clicks[0][1] + n) and dist1 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist1) and main.clicks[1][1] > (main.clicks[0][1] + dist1) and (((main.clicks[1][0] < (main.clicks[0][0] + oo1) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo1) )) or oo1 == 0)):
+                            gameState.board[main.clicks[0][0] + dist1][main.clicks[0][1] + dist1] = "--"
+                            main.validMove = True            
+                        if ((main.clicks[1][0] == main.clicks[0][0] + n) and (main.clicks[1][1] == main.clicks[0][1] - n) and dist3 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist3) and main.clicks[1][1] < (main.clicks[0][1] - dist3) and (((main.clicks[1][0] < (main.clicks[0][0] + oo3) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo3) )) or oo3 == 0)):
+                            gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] = "--"
+                            main.validMove = True
+
+                king = True if (eK == 0 or king == True or (p==0 and pawn == True and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k"))) else False
+                main.validMove = True if ( (king == True and pawn == True) or main.validMove == True) else False
+
+    def extraMove(self, orientation, opPiece):
+        x = 0
+        while(x == 0):
+            y = 0
+            if((main.clicks[1][1] - 2 )>=0 and (main.clicks[1][1] + 2)<DIMENSIONS): # BOTH
+                if((gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--") and (gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--")):             
+                    main.whiteToMove = False if main.whiteToMove != False else True
+                    main.exPiece.append(main.clicks[1]) 
+                    break
+            if(y == 0 and (main.clicks[1][1] + 2)<DIMENSIONS): # RIGHT
+                if(gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--"):
+                    y = 1
+                    gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] + 1] = "--"
+                    main.clicks[1] = (main.clicks[1][0] - orientation*2, main.clicks[1][1] + 2)
+            if(y == 0 and (main.clicks[1][1] - 2 )>=0): # LEFT
+                if(gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--"):
+                    y = 1
+                    gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] - 1] = "--"
+                    main.clicks[1] = (main.clicks[1][0] - orientation*2, main.clicks[1][1] - 2)
+            if (y == 0): # NONE
+                break
+            
     def move(self):
         if len(main.clicks) == 2:
             if (main.validMove):
                 gameState.board[main.clicks[1][0]][main.clicks[1][1]] = gameState.board[main.clicks[0][0]][main.clicks[0][1]]
                 gameState.board[main.clicks[0][0]][main.clicks[0][1]] = "--"
+                # check for promotion
+                if ((main.clicks[1][0] == 0) and (gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "wh") or (main.clicks[1][0] == DIMENSIONS - 1) and (gameState.board[main.clicks[1][0]][main.clicks[1][1]] == "bl")):  # promotion
+                    gameState.board[main.clicks[1][0]][main.clicks[1][1]] = str(gameState.board[main.clicks[1][0]][main.clicks[1][1]]) + "k"
+                # ------------------
                 main.validMove = False
                 main.whiteToMove = False if main.whiteToMove != False else True
             main.clicks = []
@@ -76,17 +183,47 @@ def loadImages():
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"), (squareSize, squareSize))
 
+
+
+def allPossibleMoves(gameState):
+    possibleMoves = []
+
+    for r in range(DIMENSIONS):
+        for c in range(DIMENSIONS):
+            if gameState.board[r][c] == "bl":
+
+                if (((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--")) or ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0))):
+                    possibleMoves.append((r, c))
+
+
+                if ((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--")):
+
+                    possibleMoves.append((r + 1, c + 1))
+
+                if ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0)):
+                    possibleMoves.append((r + 1, c - 1))
+
+
+
+    print(possibleMoves)
+    return possibleMoves
+
+
 def main():
     p.init()
     loadImages()
     clock = p.time.Clock()
     main.whiteToMove = True
     main.validMove = False
+    main.exPiece = []
     main.clicks = []
     board = Board((200, 200, 200), (100, 100, 100), p.display.set_mode((WIDTH, HEIGHT)))
     piece = Piece()
     running = True
     while running:
+        if (main.whiteToMove == False):
+            ai.eidam(gameState)
+            main.whiteToMove = True
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
