@@ -54,29 +54,41 @@ def bValue(possibleMoves, gameState):
                     boardValue+=king
                     if ((c == man.DIMENSIONS-1) or (c == 0)):
                         boardValue+=pieceOnSide
-                    if ((gameCopy[r+1][c+1].startswith("bl")) or (gameCopy[r+1][c-1].startswith("bl")) or (gameCopy[r-1][c+1].startswith("bl")) or (gameCopy[r-1][c-1].startswith("bl")) ):
-                        boardValue+=protectingPiece
+                    if ((r + 1 < man.DIMENSIONS) and (c + 1 < man.DIMENSIONS) and r - 1 > 0 and c - 1 > 0 and (
+                            (gameCopy[r + 1][c + 1].startswith("bl")) or (gameCopy[r + 1][c - 1].startswith("bl")) or (
+                            gameCopy[r - 1][c + 1].startswith("bl")) or (gameCopy[r - 1][c - 1].startswith("bl")))):
+                        boardValue += protectingPiece
+
 
                 elif gameCopy[r][c] == "whk":
                     boardValue -= king
                     if ((c == man.DIMENSIONS-1) or (c == 0)):
                         boardValue-=pieceOnSide
-                    if ((gameCopy[r+1][c+1].startswith("wh")) or (gameCopy[r+1][c-1].startswith("wh")) or (gameCopy[r-1][c+1].startswith("wh")) or (gameCopy[r-1][c-1].startswith("wh")) ):
-                        boardValue-=protectingPiece
-                        
+                    if ((r + 1 < man.DIMENSIONS) and (c + 1 < man.DIMENSIONS) and r - 1 > 0 and c - 1 > 0 and (
+                            (gameCopy[r + 1][c + 1].startswith("bl")) or (gameCopy[r + 1][c - 1].startswith("bl")) or (
+                            gameCopy[r - 1][c + 1].startswith("bl")) or (gameCopy[r - 1][c - 1].startswith("bl")))):
+                        boardValue += protectingPiece
+
+
                 elif gameCopy[r][c] == "bl":
                     boardValue +=1
                     if ((c == man.DIMENSIONS-1) or (c == 0)):
-                        boardValue+=pieceOnSid
-                    if ((gameCopy[r+1][c+1].startswith("bl")) or (gameCopy[r+1][c-1].startswith("bl")) or (gameCopy[r-1][c+1].startswith("bl")) or (gameCopy[r-1][c-1].star("bl")) ):if ((gameCopy[r+1][c+1].startswith("bl")) or (gameCopy[r+1][c-1].startswith("bl")) or (gameCopy[r-1][c+1].startswith("bl")) or (gameCopy[r-1][c-1].startswith("bl")) ):
-                        boardValue+=protectingPieceboardValue+=protectingPiece
+                        boardValue+=pieceOnSide
+
+                    if ((r + 1 < man.DIMENSIONS) and (c + 1 < man.DIMENSIONS) and r - 1 > 0 and c - 1 > 0 and (
+                            (gameCopy[r + 1][c + 1].startswith("bl")) or (gameCopy[r + 1][c - 1].startswith("bl")) or (
+                            gameCopy[r - 1][c + 1].startswith("bl")) or (gameCopy[r - 1][c - 1].startswith("bl")))):
+                        boardValue += protectingPiece
+
 
                 elif gameCopy[r][c] == "wh":
                     boardValue -=1
                     if ((c == man.DIMENSIONS-1) or (c == 0)):
                         boardValue-=pieceOnSide
-                    if ((gameCopy[r+1][c+1].startswith("wh")) or (gameCopy[r+1][c-1].startswith("wh")) or (gameCopy[r-1][c+1].startswith("wh")) or (gameCopy[r-1][c-1].startswith("wh")) ):
-                        boardValue-=protectingPiece
+                    if ((r + 1 < man.DIMENSIONS) and (c + 1 < man.DIMENSIONS) and r - 1 > 0 and c - 1 > 0 and (
+                            (gameCopy[r + 1][c + 1].startswith("bl")) or (gameCopy[r + 1][c - 1].startswith("bl")) or (
+                    gameCopy[r - 1][c + 1].startswith("bl")) or (gameCopy[r - 1][c - 1].startswith("bl")))):
+                        boardValue += protectingPiece
 
                 
                 
