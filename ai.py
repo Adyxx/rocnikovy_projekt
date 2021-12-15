@@ -40,7 +40,7 @@ def bValue(possibleMoves, gameState):
     #boardValue = numFriendly - numEnemy
     king = 10
     pieceOnSide = 1
-
+    protectingPiece = 2
     #if boardValue <0 -> randomly change all values
     #if boardValue >0 -> slightly change 1 value, if better, keep value
     for x in possibleMoves:
@@ -52,14 +52,34 @@ def bValue(possibleMoves, gameState):
             for c in range(man.DIMENSIONS):
                 if gameCopy[r][c] == "blk":
                     boardValue+=king
+                    if ((c == man.DIMENSIONS-1) or (c == 0)):
+                        boardValue+=pieceOnSide
+                    if ((gameCopy[r+1][c+1].startswith("bl")) or (gameCopy[r+1][c-1].startswith("bl")) or (gameCopy[r-1][c+1].startswith("bl")) or (gameCopy[r-1][c-1].startswith("bl")) ):
+                        boardValue+=protectingPiece
+
                 elif gameCopy[r][c] == "whk":
                     boardValue -= king
+                    if ((c == man.DIMENSIONS-1) or (c == 0)):
+                        boardValue-=pieceOnSide
+                    if ((gameCopy[r+1][c+1].startswith("wh")) or (gameCopy[r+1][c-1].startswith("wh")) or (gameCopy[r-1][c+1].startswith("wh")) or (gameCopy[r-1][c-1].startswith("wh")) ):
+                        boardValue-=protectingPiece
+                        
                 elif gameCopy[r][c] == "bl":
                     boardValue +=1
+                    if ((c == man.DIMENSIONS-1) or (c == 0)):
+                        boardValue+=pieceOnSid
+                    if ((gameCopy[r+1][c+1].startswith("bl")) or (gameCopy[r+1][c-1].startswith("bl")) or (gameCopy[r-1][c+1].startswith("bl")) or (gameCopy[r-1][c-1].star("bl")) ):if ((gameCopy[r+1][c+1].startswith("bl")) or (gameCopy[r+1][c-1].startswith("bl")) or (gameCopy[r-1][c+1].startswith("bl")) or (gameCopy[r-1][c-1].startswith("bl")) ):
+                        boardValue+=protectingPieceboardValue+=protectingPiece
 
                 elif gameCopy[r][c] == "wh":
                     boardValue -=1
+                    if ((c == man.DIMENSIONS-1) or (c == 0)):
+                        boardValue-=pieceOnSide
+                    if ((gameCopy[r+1][c+1].startswith("wh")) or (gameCopy[r+1][c-1].startswith("wh")) or (gameCopy[r-1][c+1].startswith("wh")) or (gameCopy[r-1][c-1].startswith("wh")) ):
+                        boardValue-=protectingPiece
 
+                
+                
 
         if (possibleMoves[i] == ";"):
             pawn = i+1
