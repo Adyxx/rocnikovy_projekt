@@ -1,8 +1,6 @@
 import pygame as p
-
-import ai
 import board
-
+import ai
 WIDTH = 512
 HEIGHT = WIDTH
 DIMENSIONS = 8
@@ -48,6 +46,7 @@ class Piece:
         main.clicks.append((p.mouse.get_pos()[1] // squareSize, p.mouse.get_pos()[0] // squareSize))
 
     def getValidMoves(self):
+        main.allPossibleJumps = []
         v, p, eK = 0, 0, 0
         pawn, king = False, False
         if len(main.clicks) == 2:
@@ -59,13 +58,18 @@ class Piece:
                 for r in range(DIMENSIONS):
                     for c in range(DIMENSIONS):
                         if (not gameState.board[r][c].startswith(opPiece) and gameState.board[r][c] != "--" and not gameState.board[r][c].endswith("k") ):
-                            if((c+2)<DIMENSIONS):
+                            main.allPossibleJumps.append(";")
+                            main.allPossibleJumps.append((r, c))
+                            if((c+2)<DIMENSIONS):                            
                                 if(gameState.board[r-orientation][c+1].startswith(opPiece) and gameState.board[r-(orientation*2)][c+2] == "--"): # RIGHT
+                                    main.allPossibleJumps.append((r-(orientation*2), c+2))
                                     v+=1
                                         
                             if((c-2)>=0):
                                 if(gameState.board[r-orientation][c-1].startswith(opPiece) and gameState.board[r-(orientation*2)][c-2] == "--"): # LEFT
+                                    main.allPossibleJumps.append((r-(orientation*2), c-2))
                                     v+=1
+                                                    
                 if(v==0 and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
                     if (main.clicks[0][0] == main.clicks[1][0]+orientation and (main.clicks[0][1] == main.clicks[1][1]+1 or main.clicks[0][1] == main.clicks[1][1]-1)):
                         pawn = True
@@ -128,16 +132,24 @@ class Piece:
                 else:
                     for n in range(DIMENSIONS):
                         if ((main.clicks[1][0] == main.clicks[0][0] - n) and (main.clicks[1][1] == main.clicks[0][1] - n) and dist4 > 0 and main.clicks[1][0] < (main.clicks[0][0] - dist4) and main.clicks[1][1] < (main.clicks[0][1] - dist4) and (((main.clicks[1][0] > (main.clicks[0][0] - oo4) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo4) )) or oo4 == 0)):
-                            gameState.board[main.clicks[0][0] - dist4][main.clicks[0][1] - dist4] = "--"
+                            for d in range(dist4+1):
+                                if d>0:
+                                    gameState.board[main.clicks[0][0] - d][main.clicks[0][1] - d] = "--"
                             main.validMove = True
                         if ((main.clicks[1][0] == main.clicks[0][0] - n) and (main.clicks[1][1] == main.clicks[0][1] + n) and dist2 > 0 and (main.clicks[1][0] < main.clicks[0][0] - dist2) and (main.clicks[1][1] > main.clicks[0][1] + dist2) and (((main.clicks[1][0] > (main.clicks[0][0] - oo2) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo2) )) or oo2 == 0)):
-                            gameState.board[main.clicks[0][0] - dist2][main.clicks[0][1] + dist2] = "--"
+                            for d in range(dist2+1):
+                                if d>0:
+                                    gameState.board[main.clicks[0][0] - d][main.clicks[0][1] + d] = "--"                        
                             main.validMove = True
                         if ((main.clicks[1][0] == main.clicks[0][0] + n) and (main.clicks[1][1] == main.clicks[0][1] + n) and dist1 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist1) and main.clicks[1][1] > (main.clicks[0][1] + dist1) and (((main.clicks[1][0] < (main.clicks[0][0] + oo1) ) and (main.clicks[1][1] < (main.clicks[0][1] + oo1) )) or oo1 == 0)):
-                            gameState.board[main.clicks[0][0] + dist1][main.clicks[0][1] + dist1] = "--"
+                            for d in range(dist1+1):
+                                if d>0:
+                                    gameState.board[main.clicks[0][0] + d][main.clicks[0][1] + d] = "--"
                             main.validMove = True            
                         if ((main.clicks[1][0] == main.clicks[0][0] + n) and (main.clicks[1][1] == main.clicks[0][1] - n) and dist3 > 0 and main.clicks[1][0] > (main.clicks[0][0] + dist3) and main.clicks[1][1] < (main.clicks[0][1] - dist3) and (((main.clicks[1][0] < (main.clicks[0][0] + oo3) ) and (main.clicks[1][1] > (main.clicks[0][1] - oo3) )) or oo3 == 0)):
-                            gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] = "--"
+                            for d in range(dist3+1):
+                                if d>0:
+                                    gameState.board[main.clicks[0][0] + d][main.clicks[0][1] - d] = "--"
                             main.validMove = True
 
                 king = True if (eK == 0 or king == True or (p==0 and pawn == True and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k"))) else False
@@ -177,37 +189,49 @@ class Piece:
                 main.validMove = False
                 main.whiteToMove = False if main.whiteToMove != False else True
             main.clicks = []
+            
 
 def loadImages():
     pieces = ["wh", "bl", "whk", "blk"]
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"), (squareSize, squareSize))
 
-
-
 def allPossibleMoves(gameState):
     possibleMoves = []
-
+    q=0
+    howManyHungary = 0
     for r in range(DIMENSIONS):
         for c in range(DIMENSIONS):
             if gameState.board[r][c] == "bl":
 
-                if (((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--")) or ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0))):
+                if (((r+2 < DIMENSIONS) and (c + 2 < DIMENSIONS)) and ((((gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk") ) ) and(gameState.board[r + 2][c + 2] == "--"))      or (((r+2 < DIMENSIONS) and (c - 2 > 0) and (((gameState.board[r + 1][c - 1] == "wh") or (gameState.board[r + 1][c - 1] == "whk")) and(gameState.board[r + 2][c - 2] == "--")and(gameState.board[r + 2][c - 2] == "--"))))):
+                    if (howManyHungary ==0):
+                        possibleMoves = []
+                    howManyHungary += 1
+                    possibleMoves.append(";")
                     possibleMoves.append((r, c))
 
+                    if ((c-2<DIMENSIONS) and (r+2<DIMENSIONS)and(gameState.board[r + 1][c - 1] != "--") and (c - 1 >= 0) and(gameState.board[r + 2][c - 2] == "--")):
+                        possibleMoves.append((r + 2, c - 2))
+                    if ((c+2<DIMENSIONS) and (r+2<DIMENSIONS)and(gameState.board[r + 1][c + 1] != "--") and (c + 1 >= 0)and(gameState.board[r + 2][c + 2] == "--")):
+                        possibleMoves.append((r + 2, c + 2))
+                    print("a")
+                    print(possibleMoves)
+                if (howManyHungary ==0 and (((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--")) or ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0)))):
+                    possibleMoves.append(";")
+                    possibleMoves.append((r, c))
 
-                if ((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--")):
+                if (howManyHungary ==0 and ((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--"))):
 
                     possibleMoves.append((r + 1, c + 1))
 
-                if ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0)):
+                if (howManyHungary ==0 and ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0))):
                     possibleMoves.append((r + 1, c - 1))
 
 
 
     print(possibleMoves)
     return possibleMoves
-
 
 def main():
     p.init()
@@ -217,21 +241,24 @@ def main():
     main.validMove = False
     main.exPiece = []
     main.clicks = []
+    main.allPossibleJumps = []
     board = Board((200, 200, 200), (100, 100, 100), p.display.set_mode((WIDTH, HEIGHT)))
     piece = Piece()
     running = True
     while running:
         if (main.whiteToMove == False):
+            piece.getValidMoves()
+            print(main.allPossibleJumps)
             ai.eidam(gameState)
             main.whiteToMove = True
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-            elif e.type == p.MOUSEBUTTONDOWN:
+            elif e.type == p.MOUSEBUTTONDOWN:             
                 piece.getPosition()
-                piece.getValidMoves()
+                piece.getValidMoves()             
                 piece.move()
-
+                print(main.allPossibleJumps)
         board.drawBoard()
         board.drawHighlight()
         board.drawPieces() 
