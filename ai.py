@@ -39,12 +39,13 @@ def bValue(possibleMoves, gameState):
 
     #boardValue = numFriendly - numEnemy
     king = 10
-    pieceOnSide = 1
+    pieceOnSide = 5
     protectingPiece = 2
     #if boardValue <0 -> randomly change all values
     #if boardValue >0 -> slightly change 1 value, if better, keep value
     for x in possibleMoves:
-        numStred += 1
+        if x==";":
+            numStred += 1
     while (i<numStred):
         if (possibleMoves[i] == ";"):
             pawn +=1
@@ -64,7 +65,7 @@ def bValue(possibleMoves, gameState):
                     boardValue -= king
                     if ((c == man.DIMENSIONS-1) or (c == 0)):
                         boardValue-=pieceOnSide
-                    if ((r + 1 < man.DIMENSIONS) and (c + 1 < man.DIMENSIONS) and r - 1 > 0 and c - 1 > 0 and (
+                    if ((r + 1 < man.DIMENSIONS) and (c + 1 < man.DIMENSIONS) and (r - 1 > 0) and (c - 1 > 0) and (
                             (gameCopy[r + 1][c + 1].startswith("bl")) or (gameCopy[r + 1][c - 1].startswith("bl")) or (
                             gameCopy[r - 1][c + 1].startswith("bl")) or (gameCopy[r - 1][c - 1].startswith("bl")))):
                         boardValue += protectingPiece
@@ -140,7 +141,19 @@ def bestMove(gameState):
     bestMov = []
     possibleMoves = man.allPossibleMoves(gameState)
     bestMov = bValue(possibleMoves, gameState)
+    if ((bestMov[0][1] - bestMov[1][1] ==2)):
+        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
+        gameState.board[bestMov[0][0]+1][bestMov[0][1]-1] = "--"
+        gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
+    if ((bestMov[1][1] - bestMov[0][1] ==2)):
+        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
+        gameState.board[bestMov[0][0]+1][bestMov[0][1]+1] = "--"
+        gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
+
     gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
     gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
+
+    if (bestMov[1][0] == man.DIMENSIONS-1):
+        gameState.board[bestMov[1][0]][bestMov[1][1]] = "blk"
 
     print(bestMov)
