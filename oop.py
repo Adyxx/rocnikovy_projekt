@@ -156,26 +156,28 @@ class Piece:
                 main.validMove = True if ( (king == True and pawn == True) or main.validMove == True) else False
 
     def extraMove(self, orientation, opPiece):
-        x = 0
-        while(x == 0):
-            y = 0
-            if((main.clicks[1][1] - 2 )>=0 and (main.clicks[1][1] + 2)<DIMENSIONS): # BOTH
-                if((gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--") and (gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--")):             
-                    main.whiteToMove = False if main.whiteToMove != False else True
-                    main.exPiece.append(main.clicks[1]) 
+        if(not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k")):
+            x = 0
+            while(x == 0):
+                y = 0
+                if((main.clicks[1][1] - 2 )>=0 and (main.clicks[1][1] + 2)<DIMENSIONS and main.clicks[1][0] - orientation*2 >= 0 and main.clicks[1][0] - orientation*2 < DIMENSIONS): # BOTH
+                    print(main.clicks[1][1] - 2 , main.clicks[1][1] + 2)
+                    if((gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--") and (gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--")):             
+                        main.whiteToMove = False if main.whiteToMove != False else True
+                        main.exPiece.append(main.clicks[1]) 
+                        break
+                if(y == 0 and (main.clicks[1][1] + 2)<DIMENSIONS and main.clicks[1][0] - orientation*2 >= 0 and main.clicks[1][0] - orientation*2 < DIMENSIONS): # RIGHT
+                    if(gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--"):
+                        y = 1
+                        gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] + 1] = "--"
+                        main.clicks[1] = (main.clicks[1][0] - orientation*2, main.clicks[1][1] + 2)
+                if(y == 0 and (main.clicks[1][1] - 2 )>=0 and main.clicks[1][0] - orientation*2 >= 0 and main.clicks[1][0] - orientation*2 < DIMENSIONS): # LEFT
+                    if(gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--"):
+                        y = 1
+                        gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] - 1] = "--"
+                        main.clicks[1] = (main.clicks[1][0] - orientation*2, main.clicks[1][1] - 2)
+                if (y == 0): # NONE
                     break
-            if(y == 0 and (main.clicks[1][1] + 2)<DIMENSIONS): # RIGHT
-                if(gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] + 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] + 2] == "--"):
-                    y = 1
-                    gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] + 1] = "--"
-                    main.clicks[1] = (main.clicks[1][0] - orientation*2, main.clicks[1][1] + 2)
-            if(y == 0 and (main.clicks[1][1] - 2 )>=0): # LEFT
-                if(gameState.board[main.clicks[1][0] - orientation ][main.clicks[1][1] - 1].startswith(opPiece) and gameState.board[main.clicks[1][0] - orientation*2 ][main.clicks[1][1] - 2] == "--"):
-                    y = 1
-                    gameState.board[main.clicks[1][0] - orientation][main.clicks[1][1] - 1] = "--"
-                    main.clicks[1] = (main.clicks[1][0] - orientation*2, main.clicks[1][1] - 2)
-            if (y == 0): # NONE
-                break
             
     def move(self):
         if len(main.clicks) == 2:
