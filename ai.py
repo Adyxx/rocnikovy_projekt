@@ -46,7 +46,7 @@ def bValue(possibleMoves, gameState):
     for x in possibleMoves:
         if x==";":
             numStred += 1
-    while (i<numStred):
+    for u in range (len(possibleMoves) - numStred):
         if (possibleMoves[i] == ";"):
             pawn +=1
         for r in range(man.DIMENSIONS):
@@ -91,12 +91,18 @@ def bValue(possibleMoves, gameState):
                     gameCopy[r - 1][c + 1].startswith("bl")) or (gameCopy[r - 1][c - 1].startswith("bl")))):
                         boardValue += protectingPiece
 
-                
-                
 
         if (possibleMoves[i] == ";"):
             pawn = i+1
-        i+=1
+        i += 1
+        if (((len(possibleMoves)>i+1)) and possibleMoves[i+1] == ";"):
+            pawn = i+2
+            i=1
+        if ((len(possibleMoves)==3) or (len(possibleMoves)==4) ):
+            bMove = []
+            bMove.append(possibleMoves[1])
+            bMove.append(possibleMoves[2])
+            return bMove
 
         gameCopy = copy.deepcopy(gameState.board)
 
@@ -107,7 +113,10 @@ def bValue(possibleMoves, gameState):
             bMove.append(possibleMoves[pawn+1])
 
         gameCopy[possibleMoves[pawn][0]][possibleMoves[pawn][1]] = "--"
-        gameCopy[possibleMoves[pawn+1][0]][possibleMoves[pawn+1][1]] = "bl"
+        gameCopy[possibleMoves[pawn+i][0]][possibleMoves[pawn+i][1]] = "bl"
+        print(possibleMoves[pawn+1][0])
+        if (possibleMoves[pawn+1][0] == man.DIMENSIONS - 1):
+            gameCopy[possibleMoves[pawn+1][0]][possibleMoves[pawn+1][1]] = "blk"
 
     if (bMove == []):
         bestBoardValue = boardValue
