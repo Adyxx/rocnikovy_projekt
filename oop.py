@@ -211,9 +211,9 @@ def allPossibleMoves(gameState):
                     possibleMoves.append(";")
                     possibleMoves.append((r, c))
 
-                    if ((c-2<DIMENSIONS) and (r+2<DIMENSIONS)and(gameState.board[r + 1][c - 1] != "--") and (c - 1 >= 0) and(gameState.board[r + 2][c - 2] == "--")):
+                    if ((c-2<DIMENSIONS) and (r+2<DIMENSIONS)and(gameState.board[r + 1][c - 1] == "wh") or (gameState.board[r + 1][c - 1] == "whk") and (c - 1 >= 0) and(gameState.board[r + 2][c - 2] == "--")):
                         possibleMoves.append((r + 2, c - 2))
-                    if ((c+2<DIMENSIONS) and (r+2<DIMENSIONS)and(gameState.board[r + 1][c + 1] != "--") and (c + 1 >= 0)and(gameState.board[r + 2][c + 2] == "--")):
+                    if ((c+2<DIMENSIONS) and (r+2<DIMENSIONS)and((gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk"))and (c + 1 >= 0)and(gameState.board[r + 2][c + 2] == "--")):
                         possibleMoves.append((r + 2, c + 2))
                     print("a")
                     print(possibleMoves)
