@@ -24,7 +24,7 @@ def intoTheFuture(gameState, howManyTurns, value):
 
 
 def bValue(possibleMoves, gameState):
-    i=0
+    i=1
     bestValue =0
     boardValue =0
     bestBoardValue =-999
@@ -34,6 +34,7 @@ def bValue(possibleMoves, gameState):
     pawn =0
     numStred=0
     numStredn=0
+    movedd=0
     #testing values
     #make values random, change 1 value at a time, change it for x amount of time, save values somewhere
     #Not sure if it counts as AI but it should do what I want it to
@@ -42,13 +43,14 @@ def bValue(possibleMoves, gameState):
     king = 10
     pieceOnSide = 1
     protectingPiece = 2
+    willBeEaten = -20
     #if boardValue <0 -> randomly change all values
     #if boardValue >0 -> slightly change 1 value, if better, keep value
     for x in possibleMoves:
         if x==";":
             numStred += 1
     for u in range (len(possibleMoves) - numStred):
-        if (possibleMoves[pawn+i] == ";"):
+        if (possibleMoves[pawn] == ";"):
             pawn +=1
         for r in range(man.DIMENSIONS):
             for c in range(man.DIMENSIONS):
@@ -87,6 +89,13 @@ def bValue(possibleMoves, gameState):
                             gameCopy.board[r - 1][c + 1].startswith("bl")) or (gameCopy.board[r - 1][c - 1].startswith("bl")))):
                         boardValue += protectingPiece
 
+                    if ((r + 1 < man.DIMENSIONS) and (c + 1 < man.DIMENSIONS) and r - 1 > 0 and c - 1 > 0 and (
+                            (gameCopy.board[r + 1][c + 1].startswith("wh")) or (
+                    gameCopy.board[r + 1][c - 1].startswith("wh")) or (
+                                    gameCopy.board[r - 1][c + 1].startswith("wh")) or (
+                            gameCopy.board[r - 1][c - 1].startswith("wh")))):
+                        boardValue+=willBeEaten
+
 
                 elif gameCopy.board[r][c] == "wh":
                     boardValue -=2
@@ -99,39 +108,42 @@ def bValue(possibleMoves, gameState):
 
 
 
-        i += 1
+
+
         if (possibleMoves[0] == 0):
             print("black cannot move")
+        if(movedd>0):
+            if (bestBoardValue <= boardValue):
+                bestBoardValue = boardValue
+                bMove = []
+                bMove.append(possibleMoves[pawn])
+                bMove.append(possibleMoves[pawn + i])
+            i += 1
+            if (((len(possibleMoves)>i+1)) and possibleMoves[pawn+i] == ";"):
+                pawn = pawn+i+1
+                i=1
 
-        if (possibleMoves[pawn+i] == 0):
-           return bMove
-        if (((len(possibleMoves)>i+1)) and possibleMoves[pawn+i] == ";"):
-            pawn = pawn+i+1
-            i=1
+                print("out of range")
+            if ((len(possibleMoves)==3) or (len(possibleMoves)==4) ):
+                bMove = []
+                bMove.append(possibleMoves[1])
+                bMove.append(possibleMoves[2])
+                return bMove
 
-            print("out of range")
-        if ((len(possibleMoves)==3) or (len(possibleMoves)==4) ):
-            bMove = []
-            bMove.append(possibleMoves[1])
-            bMove.append(possibleMoves[2])
+            gameCopy = copy.deepcopy(gameState)
+
+
+            if (possibleMoves[pawn+i] == ";"):
+                pawn = pawn+i+1
+                i=1
+        if (possibleMoves[pawn + i] == 0):
             return bMove
-
-        gameCopy = copy.deepcopy(gameState)
-
-        if (bestBoardValue <= boardValue):
-            bestBoardValue = boardValue
-            bMove = []
-            bMove.append(possibleMoves[pawn])
-            bMove.append(possibleMoves[pawn+i])
-        if (possibleMoves[pawn+i] == ";"):
-            pawn = pawn+i+1
-            i=1
-        gameCopy.board[possibleMoves[pawn][0]][possibleMoves[pawn][1]] = "--"
         if (gameCopy.board[possibleMoves[pawn][0]][possibleMoves[pawn][1]] =="bl"):
+            gameCopy.board[possibleMoves[pawn][0]][possibleMoves[pawn][1]] = "--"
             gameCopy.board[possibleMoves[pawn+i][0]][possibleMoves[pawn+i][1]] = "bl"
         else:
             gameCopy.board[possibleMoves[pawn + i][0]][possibleMoves[pawn + i][1]] = "blk"
-
+        movedd+=1
 
         #man.allPossibleMoves(gameCopy)
 

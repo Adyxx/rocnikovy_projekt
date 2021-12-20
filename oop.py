@@ -205,6 +205,7 @@ def allPossibleMoves(gameState):
     main.possibleMovesW = []
     q=0
     howManyHungary = 0
+    howManyHungaryW = 0
     for r in range(DIMENSIONS):
         for c in range(DIMENSIONS):
             if gameState.board[r][c] == "bl":
@@ -261,20 +262,23 @@ def allPossibleMoves(gameState):
                 possibleMoves.append((r, c))
                 for f in range(DIMENSIONS):
                     try:
-                        if (howManyHungary == 0 and ((c + f < DIMENSIONS) and (gameState.board[r + f][c + f] == "--"))):
+                        if (howManyHungary == 0 and ((c + f < DIMENSIONS) and (r+f < DIMENSIONS) and (gameState.board[r + f][c + f] == "--"))):
                             possibleMoves.append((r + f, c + f))
                     except:
                         print("out of range")
+                    try:
                         if (howManyHungary == 0 and ((gameState.board[r + f][c - f] == "--") and (c - f >= 0))):
                             possibleMoves.append((r + f, c - f))
+                    except:
+                        print("out of range")
                     try:
                         if (howManyHungary == 0 and (
-                                (c + f < DIMENSIONS) and (gameState.board[r - f][c + f] == "--"))):
+                                (c + f < DIMENSIONS)and (r-f >= 0) and (gameState.board[r - f][c + f] == "--"))):
                             possibleMoves.append((r - f, c + f))
                     except:
                         print("out of range")
                     try:
-                        if (howManyHungary == 0 and ((gameState.board[r - f][c - f] == "--") and (c - f >= 0))):
+                        if (howManyHungary == 0 and ((gameState.board[r - f][c - f] == "--")and (r-f >= 0) and (c - f >= 0))):
                             possibleMoves.append((r - f, c - f))
                     except:
                         print("out of range")
@@ -282,9 +286,9 @@ def allPossibleMoves(gameState):
             if gameState.board[r][c] == "wh":
 
                 if (((r-2 < DIMENSIONS) and (c + 2 < DIMENSIONS)) and ((((gameState.board[r - 1][c + 1] == "bl") or (gameState.board[r - 1][c + 1] == "blk") ) ) and(gameState.board[r - 2][c + 2] == "--"))      or (((r-2 < DIMENSIONS) and (c - 2 > 0) and (((gameState.board[r - 1][c - 1] == "bl") or (gameState.board[r - 1][c - 1] == "blk")) and(gameState.board[r - 2][c - 2] == "--")and(gameState.board[r - 2][c - 2] == "--"))))):
-                    if (howManyHungary ==0):
+                    if (howManyHungaryW ==0):
                         possibleMovesW = []
-                    howManyHungary += 1
+                    howManyHungaryW += 1
                     main.possibleMovesW.append(";")
                     main.possibleMovesW.append((r, c))
 
@@ -294,15 +298,15 @@ def allPossibleMoves(gameState):
                         main.possibleMovesW.append((r - 2, c + 2))
                     print("a")
                     print(main.possibleMovesW)
-                if (howManyHungary ==0 and (((c + 1 < DIMENSIONS) and (gameState.board[r - 1][c + 1] == "--")) or ((gameState.board[r - 1][c - 1] == "--") and (c - 1 >= 0)))):
+                if (howManyHungaryW ==0 and (((c + 1 < DIMENSIONS) and (gameState.board[r - 1][c + 1] == "--")) or ((gameState.board[r - 1][c - 1] == "--") and (c - 1 >= 0)))):
                     main.possibleMovesW.append(";")
                     main.possibleMovesW.append((r, c))
 
-                if (howManyHungary ==0 and ((c + 1 < DIMENSIONS) and (gameState.board[r - 1][c + 1] == "--"))):
+                if (howManyHungaryW ==0 and ((c + 1 < DIMENSIONS) and (gameState.board[r - 1][c + 1] == "--"))):
 
                     main.possibleMovesW.append((r - 1, c + 1))
 
-                if (howManyHungary ==0 and ((gameState.board[r - 1][c - 1] == "--") and (c - 1 >= 0))):
+                if (howManyHungaryW ==0 and ((gameState.board[r - 1][c - 1] == "--") and (c - 1 >= 0))):
                     main.possibleMovesW.append((r - 1, c - 1))
 
     possibleMoves.append(0)
