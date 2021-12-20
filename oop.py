@@ -264,22 +264,74 @@ def allPossibleMoves(gameState):
                     try:
                         if (howManyHungary == 0 and ((c + f < DIMENSIONS) and (r+f < DIMENSIONS) and (gameState.board[r + f][c + f] == "--"))):
                             possibleMoves.append((r + f, c + f))
+
+                        for p in range (f):
+                            print(p)
+                            if (((gameState.board[r + f-p][c + f-p] == "wh")or(gameState.board[r + f-p][c + f-p] == "whk")) and gameState.board[r + f-p+1][c + f-p+1] == "--"):
+
+                                if (howManyHungary == 0):
+                                    possibleMoves = []
+                                    possibleMoves.append(";")
+                                    possibleMoves.append((r, c))
+                                howManyHungary+=1
+
+
+                                possibleMoves.append((r + f-p+1, c + f-p+1))
                     except:
                         print("out of range")
                     try:
                         if (howManyHungary == 0 and ((gameState.board[r + f][c - f] == "--") and (c - f >= 0))):
                             possibleMoves.append((r + f, c - f))
+
+                        for p in range (f):
+                            print(p)
+                            if (((gameState.board[r + f-p][c - f+p] == "wh")or(gameState.board[r + f-p][c - f-p] == "whk")) and gameState.board[r + f+p+1][c - f-p-1] == "--"):
+
+                                if (howManyHungary == 0):
+                                    possibleMoves = []
+                                    possibleMoves.append(";")
+                                    possibleMoves.append((r, c))
+                                howManyHungary+=1
+
+
+                                possibleMoves.append((r + f-p+1, c - f-p-1))
                     except:
                         print("out of range")
                     try:
                         if (howManyHungary == 0 and (
                                 (c + f < DIMENSIONS)and (r-f >= 0) and (gameState.board[r - f][c + f] == "--"))):
                             possibleMoves.append((r - f, c + f))
+
+                        for p in range (f):
+                            print(p)
+                            if (((gameState.board[r - f+p][c + f-p] == "wh")or(gameState.board[r - f+p][c + f-p] == "whk")) and gameState.board[r - f+p-1][c + f-p+1] == "--"):
+
+                                if (howManyHungary == 0):
+                                    possibleMoves = []
+                                    possibleMoves.append(";")
+                                    possibleMoves.append((r, c))
+                                howManyHungary+=1
+
+
+                                possibleMoves.append((r - f-p-1, c + f-p+1))
                     except:
                         print("out of range")
                     try:
                         if (howManyHungary == 0 and ((gameState.board[r - f][c - f] == "--")and (r-f >= 0) and (c - f >= 0))):
                             possibleMoves.append((r - f, c - f))
+
+                        for p in range (f):
+                            print(p)
+                            if (r - f+p>=0 and c - f+p >=0(((gameState.board[r - f+p][c - f+p] == "wh")or(gameState.board[r - f+p][c - f+p] == "whk")) and gameState.board[r - f+p-1][c - f+p-1] == "--")):
+
+                                if (howManyHungary == 0):
+                                    possibleMoves = []
+                                    possibleMoves.append(";")
+                                    possibleMoves.append((r, c))
+                                howManyHungary+=1
+
+
+                                possibleMoves.append((r - f+p-1, c - f+p-1))
                     except:
                         print("out of range")
 

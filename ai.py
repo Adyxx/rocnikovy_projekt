@@ -192,21 +192,30 @@ def bestMove(gameState):
     possibleMoves = man.allPossibleMoves(gameState)
     bestMov = bValue(possibleMoves, gameState)
 
-    if (gameState.board[bestMov[0][0]][bestMov[0][1]] == "bl" and (bestMov[0][1] - bestMov[1][1] !=2)):
-        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
-        gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
-    elif (gameState.board[bestMov[0][0]][bestMov[0][1]] == "blk" and (bestMov[0][1] - bestMov[1][1] !=2)):
-        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
-        gameState.board[bestMov[1][0]][bestMov[1][1]] = "blk"
-
-    if ((bestMov[0][1] - bestMov[1][1] ==2) and gameState.board[bestMov[0][0]][bestMov[0][1]] == "bl"):
+    if ((gameState.board[bestMov[0][0]][bestMov[0][1]] == "bl") and ((bestMov[0][1] - bestMov[1][1] ==2))):
         gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
         gameState.board[bestMov[0][0]+1][bestMov[0][1]-1] = "--"
         gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
-    if ((bestMov[1][1] - bestMov[0][1] ==2)):
+    elif ((bestMov[1][1] - bestMov[0][1] ==2)):
         gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
         gameState.board[bestMov[0][0]+1][bestMov[0][1]+1] = "--"
         gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
+
+    elif ((bestMov[0][1] - bestMov[1][1] >= 2) or (bestMov[0][1] - bestMov[1][1] <= 2) and
+              gameState.board[bestMov[0][0]][bestMov[0][1]] == "blk"):
+        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
+        gameState.board[bestMov[1][0] - 1][bestMov[1][1] - 1] = "--"
+        gameState.board[bestMov[1][0]][bestMov[1][1]] = "blk"
+    elif (gameState.board[bestMov[0][0]][bestMov[0][1]] == "bl" ):
+        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
+        gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
+
+    elif (gameState.board[bestMov[0][0]][bestMov[0][1]] == "blk" and ((bestMov[0][1] - bestMov[1][1] !=2) or (bestMov[0][1] - bestMov[1][1] !=-2))):
+        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
+        gameState.board[bestMov[1][0]][bestMov[1][1]] = "blk"
+
+
+
 
 
 
