@@ -1,4 +1,6 @@
 import pygame as p
+
+import ai
 import board
 
 WIDTH = 512
@@ -198,6 +200,119 @@ def loadImages():
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"), (squareSize, squareSize))
 
+def allPossibleMoves(gameState):
+    possibleMoves = []
+    main.possibleMovesW = []
+    q=0
+    howManyHungary = 0
+    for r in range(DIMENSIONS):
+        for c in range(DIMENSIONS):
+            if gameState.board[r][c] == "bl":
+
+                if (((r+2 < DIMENSIONS) and (c + 2 < DIMENSIONS)) and (((((gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk") ) ) and(gameState.board[r + 2][c + 2] == "--"))      or (((r+2 < DIMENSIONS) and (c - 2 >= 0) and (((gameState.board[r + 1][c - 1] == "wh") or (gameState.board[r + 1][c - 1] == "whk")) and(gameState.board[r + 2][c - 2] == "--"))and(gameState.board[r + 2][c - 2] == "--"))))):
+                    if (howManyHungary ==0):
+                        possibleMoves = []
+                    howManyHungary += 1
+                    possibleMoves.append(";")
+                    possibleMoves.append((r, c))
+
+                    if ((c-2<DIMENSIONS) and (r+2<DIMENSIONS)and(gameState.board[r + 1][c - 1] == "wh") or (gameState.board[r + 1][c - 1] == "whk") and (c - 1 >= 0) and(gameState.board[r + 2][c - 2] == "--")):
+                        possibleMoves.append((r + 2, c - 2))
+                    if ((c+2<DIMENSIONS) and (r+2<DIMENSIONS)and((gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk"))and (c + 1 >= 0)and(gameState.board[r + 2][c + 2] == "--")):
+                        possibleMoves.append((r + 2, c + 2))
+                    print("a")
+                    print(possibleMoves)
+                if (howManyHungary ==0 and (((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--")) or ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0)))):
+                    possibleMoves.append(";")
+                    possibleMoves.append((r, c))
+
+                if (howManyHungary ==0 and ((c + 1 < DIMENSIONS) and (gameState.board[r + 1][c + 1] == "--"))):
+
+                    possibleMoves.append((r + 1, c + 1))
+
+                if (howManyHungary ==0 and ((gameState.board[r + 1][c - 1] == "--") and (c - 1 >= 0))):
+                    possibleMoves.append((r + 1, c - 1))
+
+
+            if gameState.board[r][c] == "blk":
+                if (((r + 2 < DIMENSIONS) and (c + 2 < DIMENSIONS)) and (
+                        (((gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk"))) and (
+                        gameState.board[r + 2][c + 2] == "--")) or (((r + 2 < DIMENSIONS) and (c - 2 > 0) and (
+                        ((gameState.board[r + 1][c - 1] == "wh") or (gameState.board[r + 1][c - 1] == "whk")) and (
+                        gameState.board[r + 2][c - 2] == "--") and (gameState.board[r + 2][c - 2] == "--"))))):
+                    if (howManyHungary == 0):
+                        possibleMoves = []
+                    howManyHungary += 1
+                    possibleMoves.append(";")
+                    possibleMoves.append((r, c))
+
+                    if ((c - 2 < DIMENSIONS) and (r + 2 < DIMENSIONS) and (gameState.board[r + 1][c - 1] == "wh") or (
+                            gameState.board[r + 1][c - 1] == "whk") and (c - 1 >= 0) and (
+                            gameState.board[r + 2][c - 2] == "--")):
+                        possibleMoves.append((r + 2, c - 2))
+                    if ((c + 2 < DIMENSIONS) and (r + 2 < DIMENSIONS) and (
+                            (gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk")) and (
+                            c + 1 >= 0) and (gameState.board[r + 2][c + 2] == "--")):
+                        possibleMoves.append((r + 2, c + 2))
+                    print("a")
+                    print(possibleMoves)
+
+                possibleMoves.append(";")
+                possibleMoves.append((r, c))
+                for f in range(DIMENSIONS):
+                    try:
+                        if (howManyHungary == 0 and ((c + f < DIMENSIONS) and (gameState.board[r + f][c + f] == "--"))):
+                            possibleMoves.append((r + f, c + f))
+                    except:
+                        print("out of range")
+                        if (howManyHungary == 0 and ((gameState.board[r + f][c - f] == "--") and (c - f >= 0))):
+                            possibleMoves.append((r + f, c - f))
+                    try:
+                        if (howManyHungary == 0 and (
+                                (c + f < DIMENSIONS) and (gameState.board[r - f][c + f] == "--"))):
+                            possibleMoves.append((r - f, c + f))
+                    except:
+                        print("out of range")
+                    try:
+                        if (howManyHungary == 0 and ((gameState.board[r - f][c - f] == "--") and (c - f >= 0))):
+                            possibleMoves.append((r - f, c - f))
+                    except:
+                        print("out of range")
+
+            if gameState.board[r][c] == "wh":
+
+                if (((r-2 < DIMENSIONS) and (c + 2 < DIMENSIONS)) and ((((gameState.board[r - 1][c + 1] == "bl") or (gameState.board[r - 1][c + 1] == "blk") ) ) and(gameState.board[r - 2][c + 2] == "--"))      or (((r-2 < DIMENSIONS) and (c - 2 > 0) and (((gameState.board[r - 1][c - 1] == "bl") or (gameState.board[r - 1][c - 1] == "blk")) and(gameState.board[r - 2][c - 2] == "--")and(gameState.board[r - 2][c - 2] == "--"))))):
+                    if (howManyHungary ==0):
+                        possibleMovesW = []
+                    howManyHungary += 1
+                    main.possibleMovesW.append(";")
+                    main.possibleMovesW.append((r, c))
+
+                    if ((c-2<DIMENSIONS) and (r-2<DIMENSIONS)and(gameState.board[r - 1][c - 1] == "bl") or (gameState.board[r - 1][c - 1] == "blk") and (c - 1 >= 0) and(gameState.board[r - 2][c - 2] == "--")):
+                        main.possibleMovesW.append((r - 2, c - 2))
+                    if ((c+2<DIMENSIONS) and (r+2<DIMENSIONS)and((gameState.board[r - 1][c + 1] == "bl") or (gameState.board[r - 1][c + 1] == "blk"))and (c + 1 >= 0)and(gameState.board[r - 2][c + 2] == "--")):
+                        main.possibleMovesW.append((r - 2, c + 2))
+                    print("a")
+                    print(main.possibleMovesW)
+                if (howManyHungary ==0 and (((c + 1 < DIMENSIONS) and (gameState.board[r - 1][c + 1] == "--")) or ((gameState.board[r - 1][c - 1] == "--") and (c - 1 >= 0)))):
+                    main.possibleMovesW.append(";")
+                    main.possibleMovesW.append((r, c))
+
+                if (howManyHungary ==0 and ((c + 1 < DIMENSIONS) and (gameState.board[r - 1][c + 1] == "--"))):
+
+                    main.possibleMovesW.append((r - 1, c + 1))
+
+                if (howManyHungary ==0 and ((gameState.board[r - 1][c - 1] == "--") and (c - 1 >= 0))):
+                    main.possibleMovesW.append((r - 1, c - 1))
+
+    possibleMoves.append(0)
+    main.possibleMovesW.append(0)
+    print("black")
+    print(possibleMoves)
+    print("white")
+    print(main.possibleMovesW)
+    return possibleMoves
+
 def main():
     p.init()
     loadImages()
@@ -207,10 +322,16 @@ def main():
     main.exPiece = []
     main.clicks = []
     main.allPossibleJumps = []
+    main.possibleMovesW = []
     board = Board((200, 200, 200), (100, 100, 100), p.display.set_mode((WIDTH, HEIGHT)))
     piece = Piece()
     running = True
     while running:
+        if (main.whiteToMove == False):
+            piece.getValidMoves()
+            print(main.allPossibleJumps)
+            ai.eidam(gameState)
+            main.whiteToMove = True
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
