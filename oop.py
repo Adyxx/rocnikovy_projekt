@@ -135,7 +135,7 @@ class Piece:
                         gameState.board[main.clicks[0][0] + dist3][main.clicks[0][1] - dist3] = "--"
                         main.validMove = True
 
-                king = True if (eK == 0 or king == True or (p==0 and pawn == True)) else False
+                king = True if (eK == 0 or king == True or (p==0 and pawn == True and not gameState.board[main.clicks[0][0]][main.clicks[0][1]].endswith("k"))) else False
                 main.validMove = True if ( (king == True and pawn == True) or main.validMove == True) else False
 
     def extraMove(self):
