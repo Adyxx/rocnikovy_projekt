@@ -332,7 +332,7 @@ def allPossibleMoves(gameState):
                                 possibleMoves.append((r - f, c - f))
 
                             for p in range (f):
-                                if (r - f+p>=0 and c - f+p >=0(((gameState.board[r - f+p][c - f+p] == "wh")or(gameState.board[r - f+p][c - f+p] == "whk")) and gameState.board[r - f+p-1][c - f+p-1] == "--")):
+                                if (r - f+p>0 and c - f+p >0 and (((gameState.board[r - f+p][c - f+p] == "wh")or(gameState.board[r - f+p][c - f+p] == "whk")) and gameState.board[r - f+p-1][c - f+p-1] == "--")):
 
                                     if (howManyHungary == 0):
                                         possibleMoves = []
