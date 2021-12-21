@@ -11,18 +11,11 @@ import copy
 howManyTurns = 2
 
 def eidam(gameState):#main
-
-    bm=bestMove(gameState)
-    return bm
-
-
-def intoTheFuture(gameState, howManyTurns, value):
-    game_copy = gameState
-
-    while(howManyTurns >0):
-
-        howManyTurns = howManyTurns - 1
-
+    bestMov = []
+    possibleMoves = man.allPossibleMoves(gameState)
+    bestMov = bValue(possibleMoves, gameState)
+    print(bestMov)
+    return bestMov
 
 def bValue(possibleMoves, gameState):
     i=1
@@ -44,7 +37,7 @@ def bValue(possibleMoves, gameState):
     king = 10
     pieceOnSide = 1
     protectingPiece = 2
-    willBeEaten = -20
+    willBeEaten = -2
     #if boardValue <0 -> randomly change all values
     #if boardValue >0 -> slightly change 1 value, if better, keep value
     for x in possibleMoves:
@@ -67,6 +60,12 @@ def bValue(possibleMoves, gameState):
                             gameCopy.board[r - 1][c + 1].startswith("bl")) or (gameCopy.board[r - 1][c - 1].startswith("bl")))):
                         boardValue += protectingPiece
 
+                    if ((r + 1 < man.DIMENSIONS) and (c + 1 < man.DIMENSIONS) and r - 1 > 0 and c - 1 > 0 and (
+                            (gameCopy.board[r + 1][c + 1].startswith("wh")) or (
+                    gameCopy.board[r + 1][c - 1].startswith("wh")) or (
+                                    gameCopy.board[r - 1][c + 1].startswith("wh")) or (
+                            gameCopy.board[r - 1][c - 1].startswith("wh")))):
+                        boardValue+=willBeEaten
 
                 elif gameCopy.board[r][c] == "whk":
                     boardValue -= king
@@ -162,34 +161,4 @@ def bValue(possibleMoves, gameState):
 
     print("Current value:")
     return bMove
-'''
-def database(r,c):
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="eidam",
-        password="cheese",
-        database="cheesecake"
-    )
-    moves = mydb.cursor()
-    moves.execute("CREATE DATABASE mydatabase")
-    sql = "INSERT INTO moves (row, col) VALUES (%s, %s)"
-    vall = (r, c)
-    moves.execute(sql, vall)
-    mydb.commit()
-    print("arghhhhh")
-'''
-def whiteMove(gameState):
-    possibleMoves = man.allPossibleMoves(gameState)
 
-
-def move(gameState, piece, pos1, pos2, row, col):
-
-    print("testAI")
-
-def bestMove(gameState):
-    bestMov = []
-    possibleMoves = man.allPossibleMoves(gameState)
-    bestMov = bValue(possibleMoves, gameState)
-
-    print(bestMov)
-    return bestMov
