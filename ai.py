@@ -1,12 +1,6 @@
 #Use this branch to make AI
-import pygame as p
-import board
-import random
 import oop as man
 import copy
-
-#import tensorflow as tf
-#import mysql.connector
 
 howManyTurns = 2
 
@@ -18,28 +12,18 @@ def eidam(gameState):#main
     return bestMov
 
 def bValue(possibleMoves, gameState):
-    i=1
-    bestValue =0
-    boardValue =0
-    bestBoardValue =-999
+    i = 1
+    boardValue = 0
+    bestBoardValue = -999
     bMove = []
     gameCopy = copy.deepcopy(gameState)
-    whatPawn=0
-    pawn =0
-    numStred=0
-    numStredn=0
-    movedd=0
-    #testing values
-    #make values random, change 1 value at a time, change it for x amount of time, save values somewhere
-    #Not sure if it counts as AI but it should do what I want it to
-
-    #boardValue = numFriendly - numEnemy
+    pawn = 0
+    numStred = 0
+    movedd = 0
     king = 10
     pieceOnSide = 1
     protectingPiece = 2
     willBeEaten = -2
-    #if boardValue <0 -> randomly change all values
-    #if boardValue >0 -> slightly change 1 value, if better, keep value
     for x in possibleMoves:
         if x==";":
             numStred += 1
@@ -48,9 +32,6 @@ def bValue(possibleMoves, gameState):
             pawn +=1
         for r in range(man.DIMENSIONS):
             for c in range(man.DIMENSIONS):
-                #print(man.main.possibleMovesW)
-                #gameCopy.board[man.main.possibleMovesW[1][0]][man.main.possibleMovesW[1][1]] = "--"
-                #gameCopy.board[man.main.possibleMovesW[2][0]][man.main.possibleMovesW[2][1]] = "wh"
                 if gameCopy.board[r][c] == "blk":
                     boardValue+=king
                     if ((c == man.DIMENSIONS-1) or (c == 0)):
@@ -76,7 +57,6 @@ def bValue(possibleMoves, gameState):
                             gameCopy.board[r - 1][c + 1].startswith("bl")) or (gameCopy.board[r - 1][c - 1].startswith("bl")))):
                         boardValue += protectingPiece
 
-
                 elif gameCopy.board[r][c] == "bl":
                     boardValue +=2
                     if ((c == man.DIMENSIONS-1) or (c == 0)):
@@ -94,7 +74,6 @@ def bValue(possibleMoves, gameState):
                             gameCopy.board[r - 1][c - 1].startswith("wh")))):
                         boardValue+=willBeEaten
 
-
                 elif gameCopy.board[r][c] == "wh":
                     boardValue -=2
                     if ((c == man.DIMENSIONS-1) or (c == 0)):
@@ -103,10 +82,6 @@ def bValue(possibleMoves, gameState):
                             (gameCopy.board[r + 1][c + 1].startswith("bl")) or (gameCopy.board[r + 1][c - 1].startswith("bl")) or (
                     gameCopy.board[r - 1][c + 1].startswith("bl")) or (gameCopy.board[r - 1][c - 1].startswith("bl")))):
                         boardValue += protectingPiece
-
-
-
-
 
         if (possibleMoves[0] == 0):
             print("black cannot move")
@@ -130,7 +105,6 @@ def bValue(possibleMoves, gameState):
 
             gameCopy = copy.deepcopy(gameState)
 
-
             if (possibleMoves[pawn+i] == ";"):
                 pawn = pawn+i+1
                 i=1
@@ -143,12 +117,6 @@ def bValue(possibleMoves, gameState):
             gameCopy.board[possibleMoves[pawn + i][0]][possibleMoves[pawn + i][1]] = "blk"
         movedd+=1
 
-        #man.allPossibleMoves(gameCopy)
-
-        #gameCopy.board[man.main.possibleMovesW[1][0]][man.main.possibleMovesW[1][1]] = "--"
-        #gameCopy.board[man.main.possibleMovesW[2][0]][man.main.possibleMovesW[2][1]] = "wh"
-
-
         print(possibleMoves[pawn+1][0])
         boardValue =0
         if (possibleMoves[pawn+1][0] == man.DIMENSIONS - 1):
@@ -159,6 +127,4 @@ def bValue(possibleMoves, gameState):
         bMove.append(possibleMoves[pawn])
         bMove.append(possibleMoves[pawn + 1])
 
-    print("Current value:")
     return bMove
-
