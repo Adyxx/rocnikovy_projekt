@@ -210,7 +210,7 @@ def allPossibleMoves(gameState):
         for c in range(DIMENSIONS):
             if gameState.board[r][c] == "bl":
 
-                if (((r+2 < DIMENSIONS) and (c + 2 < DIMENSIONS)) and (((((gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk") ) ) and(gameState.board[r + 2][c + 2] == "--"))      or (((r+2 < DIMENSIONS) and (c - 2 >= 0) and (((gameState.board[r + 1][c - 1] == "wh") or (gameState.board[r + 1][c - 1] == "whk")) and(gameState.board[r + 2][c - 2] == "--"))and(gameState.board[r + 2][c - 2] == "--"))))):
+                if (((((r+2 < DIMENSIONS) and (c + 2 < DIMENSIONS)) and ((gameState.board[r + 1][c + 1] == "wh") or (gameState.board[r + 1][c + 1] == "whk")) and(gameState.board[r + 2][c + 2] == "--")))      or (((r+2 < DIMENSIONS) and (c - 2 >= 0) and (((gameState.board[r + 1][c - 1] == "wh") or (gameState.board[r + 1][c - 1] == "whk")) and(gameState.board[r + 2][c - 2] == "--"))and(gameState.board[r + 2][c - 2] == "--")))):
                     if (howManyHungary ==0):
                         possibleMoves = []
                     howManyHungary += 1
@@ -384,9 +384,12 @@ def main():
     running = True
     while running:
         if (main.whiteToMove == False):
+
             piece.getValidMoves()
             print(main.allPossibleJumps)
-            ai.eidam(gameState)
+            main.clicks = ai.eidam(gameState)
+            piece.getValidMoves()
+            piece.move()
             main.whiteToMove = True
         for e in p.event.get():
             if e.type == p.QUIT:

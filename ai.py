@@ -12,7 +12,8 @@ howManyTurns = 2
 
 def eidam(gameState):#main
 
-    bestMove(gameState)
+    bm=bestMove(gameState)
+    return bm
 
 
 def intoTheFuture(gameState, howManyTurns, value):
@@ -54,8 +55,6 @@ def bValue(possibleMoves, gameState):
             pawn +=1
         for r in range(man.DIMENSIONS):
             for c in range(man.DIMENSIONS):
-
-
                 #print(man.main.possibleMovesW)
                 #gameCopy.board[man.main.possibleMovesW[1][0]][man.main.possibleMovesW[1][1]] = "--"
                 #gameCopy.board[man.main.possibleMovesW[2][0]][man.main.possibleMovesW[2][1]] = "wh"
@@ -192,35 +191,5 @@ def bestMove(gameState):
     possibleMoves = man.allPossibleMoves(gameState)
     bestMov = bValue(possibleMoves, gameState)
 
-    if ((gameState.board[bestMov[0][0]][bestMov[0][1]] == "bl") and ((bestMov[0][1] - bestMov[1][1] ==2))):
-        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
-        gameState.board[bestMov[0][0]+1][bestMov[0][1]-1] = "--"
-        gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
-    elif ((bestMov[1][1] - bestMov[0][1] ==2)):
-        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
-        gameState.board[bestMov[0][0]+1][bestMov[0][1]+1] = "--"
-        gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
-
-    elif ((bestMov[0][1] - bestMov[1][1] >= 2) or (bestMov[0][1] - bestMov[1][1] <= 2) and
-              gameState.board[bestMov[0][0]][bestMov[0][1]] == "blk"):
-        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
-        gameState.board[bestMov[1][0] - 1][bestMov[1][1] - 1] = "--"
-        gameState.board[bestMov[1][0]][bestMov[1][1]] = "blk"
-    elif (gameState.board[bestMov[0][0]][bestMov[0][1]] == "bl" ):
-        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
-        gameState.board[bestMov[1][0]][bestMov[1][1]] = "bl"
-
-    elif (gameState.board[bestMov[0][0]][bestMov[0][1]] == "blk" and ((bestMov[0][1] - bestMov[1][1] !=2) or (bestMov[0][1] - bestMov[1][1] !=-2))):
-        gameState.board[bestMov[0][0]][bestMov[0][1]] = "--"
-        gameState.board[bestMov[1][0]][bestMov[1][1]] = "blk"
-
-
-
-
-
-
-
-    if (bestMov[1][0] == man.DIMENSIONS-1):
-        gameState.board[bestMov[1][0]][bestMov[1][1]] = "blk"
-
     print(bestMov)
+    return bestMov
