@@ -352,7 +352,7 @@ def menu():
     p.init()
     surface = p.display.set_mode((600, 600))
     menu = pygame_menu.Menu('Aidama', 600, 600, theme=pygame_menu.themes.THEME_DARK)
-    menu.add.selector('versus ', [('PC', 1), ('Friend', 2)], onchange=set_opponent)
+    menu.add.selector('versus ', [('   PC   ', 1), ('Friend', 2)], onchange=set_opponent)
     menu.add.button('Play', main)
     menu.add.button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(surface)
