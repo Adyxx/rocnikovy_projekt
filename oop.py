@@ -1,10 +1,9 @@
 import pygame as p
 import pygame_menu
-
 import ai
 import board
 
-WIDTH = 512
+WIDTH = 928
 HEIGHT = WIDTH
 DIMENSIONS = 8
 IMAGES = {}
@@ -198,7 +197,7 @@ class Piece:
 def loadImages():
     pieces = ["wh", "bl", "whk", "blk"]
     for piece in pieces:
-        IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"), (squareSize, squareSize))
+        IMAGES[piece] = p.transform.scale(p.image.load("images/" + str(main.pieceColor) + "/" + piece + ".png"), (squareSize, squareSize))
 
 def allPossibleMoves(gameState):
     possibleMoves = []
@@ -349,16 +348,21 @@ def allPossibleMoves(gameState):
 
 def menu():
     main.op = 0
+    main.pieceColor = 0
     p.init()
-    surface = p.display.set_mode((600, 600))
-    menu = pygame_menu.Menu('Aidama', 600, 600, theme=pygame_menu.themes.THEME_DARK)
+    surface = p.display.set_mode((WIDTH, HEIGHT))
+    menu = pygame_menu.Menu('Aidama', WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_DARK)
     menu.add.selector('versus ', [('   PC   ', 1), ('Friend', 2)], onchange=set_opponent)
+    menu.add.selector('pieces ', [(' black/white', 1), ('   red/blue   ', 2)], onchange=set_pieces)
     menu.add.button('Play', main)
     menu.add.button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(surface)
 
 def set_opponent(value, d):
     main.op = 0 if d == 1 else 3
+
+def set_pieces(value, d):
+    main.pieceColor = 0 if d == 1 else 1
 
 def main():
     loadImages()
