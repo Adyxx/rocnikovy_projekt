@@ -353,7 +353,8 @@ def menu():
     surface = p.display.set_mode((WIDTH, HEIGHT))
     menu = pygame_menu.Menu('Aidama', WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_DARK)
     menu.add.selector('versus ', [('   PC   ', 1), ('Friend', 2)], onchange=set_opponent)
-    menu.add.selector('pieces ', [(' black/white', 1), ('   red/blue   ', 2)], onchange=set_pieces)
+    menu.add.selector('pieces ', [(' black/white', 1), ('   red/blue   ', 2), ('purple/green', 3)], onchange=set_pieces)
+
     menu.add.button('Play', main)
     menu.add.button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(surface)
@@ -362,7 +363,13 @@ def set_opponent(value, d):
     main.op = 0 if d == 1 else 3
 
 def set_pieces(value, d):
-    main.pieceColor = 0 if d == 1 else 1
+    if (d == 1):
+        main.pieceColor = 0
+    elif (d == 2):
+        main.pieceColor = 1
+    else:
+        main.pieceColor = 2
+
 
 def main():
     loadImages()
