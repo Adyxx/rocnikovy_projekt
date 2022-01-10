@@ -8,6 +8,8 @@
 [19. 8. : psaní poznámek, bug fixes 😃]
 
 [8. 9. : pouze legální pohyby, promoce, bug fixes]
+
+[Ukázka na YT: https://youtu.be/ObRP6IkxVb8]
 ```
 
 
